@@ -7,7 +7,15 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, Button} from 'react-native';
+import {
+  Platform, 
+  StyleSheet, 
+  Text, 
+  View, 
+  TextInput, 
+  Button, 
+  TouchableOpacity
+} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -26,6 +34,8 @@ export default class App extends Component {
       placeName: val
     });
   }
+
+  handlePress = (e) => {}
   
 
   render() {
@@ -33,12 +43,15 @@ export default class App extends Component {
       <View style={styles.container}>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{backgroundColor: 'white', marginBottom: 10, ...styles.placeInput}}
+            style={{backgroundColor: 'white', ...styles.placeInput}}
             placeholder="Awesome input"
             value={this.state.placeName}
             onChangeText={this.placeNameChangeHandler}
           />
-          <Button color="#841584" title='ADD'/>
+          {/* <Button color="#841584" title='ADD'/> */}
+          <TouchableOpacity onPress={this.handlePress}>
+            <Text style={styles.placeButton}>Click Me!</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -55,23 +68,23 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   inputContainer: {
-    // flex: 1,
     width: '100%',
     flexDirection: 'row',
- 
+    alignContent: 'center',
     alignItems: 'center',
-    alignContent: 'center'
+    justifyContent: 'center',
 
   },
   placeInput: {
     width: '70%',
-    borderWidth: 1,
-    borderColor: 'red'
   },
   placeButton: {
-    height: '100%',
-    width: '30%',
-    borderWidth: 1,
-    borderColor: 'red'
+    backgroundColor: 'red',
+    borderRadius: 1,
+    color: 'white',
+    overflow: 'hidden',
+    flexGrow: 1,
+    padding: 12,
+    textAlign:'center',
   }
 });
