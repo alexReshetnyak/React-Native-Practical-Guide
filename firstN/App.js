@@ -16,6 +16,7 @@ import {
   Button, 
   TouchableOpacity
 } from 'react-native';
+import { ListItem } from './src/components/ListItem/ListItem';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -26,7 +27,8 @@ const instructions = Platform.select({
 
 export default class App extends Component {
   state = {
-    placeName: ''
+    placeName: '',
+    places: []
   }
 
   placeNameChangeHandler = val => {
@@ -35,10 +37,20 @@ export default class App extends Component {
     });
   }
 
-  handlePress = (e) => {}
-  
+  placeSubmitHandler = (e) => {
+    if (!this.state.placeName.trim()) { return; }
+
+    this.setState(prevState => ({
+      placeName: '',
+      places: prevState.places.concat(prevState.placeName)
+    }));
+  }
 
   render() {
+    const placesOutput = this.state.places.map((place, index) => (
+      <ListItem key={index} placeName={place}></ListItem>
+    ));
+
     return (
       <View style={styles.container}>
         <View style={styles.inputContainer}>
@@ -49,9 +61,13 @@ export default class App extends Component {
             onChangeText={this.placeNameChangeHandler}
           />
           {/* <Button color="#841584" title='ADD'/> */}
-          <TouchableOpacity onPress={this.handlePress}>
+          <TouchableOpacity onPress={this.placeSubmitHandler}>
             <Text style={styles.placeButton}>Click Me!</Text>
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.listContainer}>
+          {placesOutput}
         </View>
       </View>
     );
@@ -72,8 +88,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
-
+    justifyContent: 'space-between',
+    // borderColor: 'black',
+    // borderWidth: 1
   },
   placeInput: {
     width: '70%',
@@ -86,5 +103,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 12,
     textAlign:'center',
+  },
+  listContainer: {
+    width: '100%'
   }
 });
