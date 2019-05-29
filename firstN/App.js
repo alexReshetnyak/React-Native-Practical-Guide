@@ -16,14 +16,8 @@ import {
   Button, 
   TouchableOpacity
 } from 'react-native';
-import { ListItem } from './src/components/ListItem/ListItem';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import { PlaceList } from './src/components/PlaceList/PlaceList';
+import { PlaceInput } from './src/components/PlaceInput/PlaceInput';
 
 export default class App extends Component {
   state = {
@@ -46,29 +40,24 @@ export default class App extends Component {
     }));
   }
 
-  render() {
-    const placesOutput = this.state.places.map((place, index) => (
-      <ListItem key={index} placeName={place}></ListItem>
-    ));
+  onItemDeleted = index => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter((place, i) => i !== index)
+      }
+    });
+  }
 
+  render() {
     return (
       <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={{backgroundColor: 'white', ...styles.placeInput}}
-            placeholder="Awesome input"
-            value={this.state.placeName}
-            onChangeText={this.placeNameChangeHandler}
-          />
-          {/* <Button color="#841584" title='ADD'/> */}
-          <TouchableOpacity onPress={this.placeSubmitHandler}>
-            <Text style={styles.placeButton}>Click Me!</Text>
-          </TouchableOpacity>
-        </View>
+        <PlaceInput 
+          placeName={this.state.placeName} 
+          placeNameChangeHandler={this.placeNameChangeHandler}
+          placeSubmitHandler={this.placeSubmitHandler}
+        />
 
-        <View style={styles.listContainer}>
-          {placesOutput}
-        </View>
+        <PlaceList places={this.state.places} onItemDeleted={this.onItemDeleted} />
       </View>
     );
   }
@@ -82,29 +71,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'yellow',
     padding: 20,
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    // borderColor: 'black',
-    // borderWidth: 1
-  },
-  placeInput: {
-    width: '70%',
-  },
-  placeButton: {
-    backgroundColor: 'red',
-    borderRadius: 1,
-    color: 'white',
-    overflow: 'hidden',
-    flexGrow: 1,
-    padding: 12,
-    textAlign:'center',
-  },
-  listContainer: {
-    width: '100%'
   }
 });
