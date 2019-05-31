@@ -36,14 +36,16 @@ export default class App extends Component {
 
     this.setState(prevState => ({
       placeName: '',
-      places: prevState.places.concat(prevState.placeName)
+      places: prevState.places.concat({key: Date.now() + '', value: prevState.placeName})
     }));
   }
 
-  onItemDeleted = index => {
+  onItemDeleted = key => {
     this.setState(prevState => {
       return {
-        places: prevState.places.filter((place, i) => i !== index)
+        places: prevState.places.filter(place => {
+          return place.key !== key;
+        })
       }
     });
   }

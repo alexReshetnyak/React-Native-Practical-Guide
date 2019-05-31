@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableHighlight, T
 
 const ListItem = ({ placeName, onItemPressed }) => (
 
-	// * TouchableWithoutFeedback can listen touch events
+	// * TouchableWithoutFeedback can listen touch events without effects
 	<TouchableOpacity onPress={onItemPressed}>
 		<View style={styles.listItem}>
 			<Text>{placeName}</Text>
