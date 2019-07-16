@@ -6,6 +6,8 @@
  * @flow
  */
 
+// * to reload device set live reload (ctrl + m) or press rr
+
 import React, {Component} from 'react';
 import {
   Platform, 
@@ -21,22 +23,12 @@ import { PlaceInput } from './src/components/PlaceInput/PlaceInput';
 
 export default class App extends Component {
   state = {
-    placeName: '',
     places: []
   }
 
-  placeNameChangeHandler = val => {
-    this.setState({
-      placeName: val
-    });
-  }
-
-  placeSubmitHandler = (e) => {
-    if (!this.state.placeName.trim()) { return; }
-
+  placeSubmitHandler = (newPlace) => {
     this.setState(prevState => ({
-      placeName: '',
-      places: prevState.places.concat({key: Date.now() + '', value: prevState.placeName})
+      places: prevState.places.concat({key: Date.now() + '', value: newPlace})
     }));
   }
 
@@ -53,10 +45,8 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <PlaceInput 
-          placeName={this.state.placeName} 
-          placeNameChangeHandler={this.placeNameChangeHandler}
-          placeSubmitHandler={this.placeSubmitHandler}
+        <PlaceInput
+          onPlaceAdded={this.placeSubmitHandler}
         />
 
         <PlaceList places={this.state.places} onItemDeleted={this.onItemDeleted} />

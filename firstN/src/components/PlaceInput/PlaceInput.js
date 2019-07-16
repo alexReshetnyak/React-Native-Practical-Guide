@@ -1,23 +1,47 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
 
-const PlaceInput = ({ placeName, placeNameChangeHandler, placeSubmitHandler }) => {
-	return (
-		<View style={styles.inputContainer}>
-			<TextInput
-				style={{backgroundColor: 'white', ...styles.placeInput}}
-				placeholder="Awesome input"
-				value={placeName}
-				onChangeText={placeNameChangeHandler}
-			/>
-			{/* <Button color="#841584" title='ADD'/> */}
-			<TouchableOpacity onPress={placeSubmitHandler}>
-				<Text style={styles.placeButton}>Click Me!</Text>
-			</TouchableOpacity>
-		</View>
-	)
-}
+class PlaceInput extends Component {
+	state = {
+		placeName: '',
+	}
 
+	placeNameChangeHandler = val => {
+		this.setState({
+			placeName: val
+		});
+	}
+
+	placeSubmitHandler = (e) => {
+    if (!this.state.placeName.trim()) { return; }
+
+		this.props.onPlaceAdded(this.state.placeName);
+		
+		this.setState({
+			placeName: ''
+		});
+  }
+
+	render() {
+		const { placeName } = this.state;
+
+		return (
+			<View style={styles.inputContainer}>
+				<TextInput
+					style={{backgroundColor: 'white', ...styles.placeInput}}
+					placeholder="Awesome input"
+					value={placeName}
+					onChangeText={this.placeNameChangeHandler}
+				/>
+				{/* <Button color="#841584" title='ADD'/> */}
+				<TouchableOpacity onPress={this.placeSubmitHandler}>
+					<Text style={styles.placeButton}>Click Me!</Text>
+				</TouchableOpacity>
+			</View>
+		);
+	}
+}
+ 
 const styles = StyleSheet.create({
 	listContainer: {
 			width: '100%'
