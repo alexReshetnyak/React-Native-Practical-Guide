@@ -5,23 +5,24 @@ import { ListItem } from '../ListItem/ListItem';
 
 const PlaceList = ({ places, onItemDeleted }) => {
 
-	const placeList = places.map((place) => (
-		<ListItem 
-			key={place.key} 
-			placeName={place.value}
-			onItemPressed={() => onItemDeleted(place.key)}
-		></ListItem>
-	));
+	// const placeList = places.map((place) => (
+	// 	<ListItem 
+	// 		key={place.key} 
+	// 		placeName={place.value}
+	// 		onItemPressed={() => onItemDeleted(place.key)}
+	// 	></ListItem>
+	// ));
 
 	return (
 		// * FlatList is most efficient than scrollList
 		<FlatList 
 			style={styles.listContainer}
 			data={places}
-			renderItem={placeInfo => (
+			renderItem={({ item }) => (
 				<ListItem 
-					placeName={placeInfo.item.value}
-					onItemPressed={() => onItemDeleted(placeInfo.item.key)}
+					placeName={item.name}
+					placeImage={item.image}
+					onItemPressed={() => onItemDeleted(item.key)}
 				></ListItem>
 			)}
 		>
