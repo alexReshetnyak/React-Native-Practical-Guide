@@ -2,7 +2,9 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
 
 const ListItem = ({ placeName, placeImage, onItemPressed }) => {
-
+	// ? test react-native-debugger tool
+	// console.log(placeName);
+	
 	// * TouchableWithoutFeedback can listen touch events without effects
 	return <TouchableOpacity onPress={onItemPressed}>
 		<View style={styles.listItem}>
