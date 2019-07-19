@@ -19,11 +19,13 @@ import {
 
 import { PlaceList } from './src/components/PlaceList/PlaceList';
 import { PlaceInput } from './src/components/PlaceInput/PlaceInput';
+import { PlaceDetail } from './src/components/PlaceDetail/PlaceDetail';
 import placeImage from './src/assets/Screenshot_1.png'; // * will create js object with path property
 
 export default class App extends Component {
   state = {
-    places: []
+    places: [],
+    selectedPlace: null
   }
 
   placeAddedHandler = newPlace => {
@@ -39,19 +41,24 @@ export default class App extends Component {
     }));
   }
 
-  onItemDeleted = key => {
-    this.setState(prevState => {
-      return {
-        places: prevState.places.filter(place => place.key !== key)
-      }
-    });
+  onPlaceSelectedHandler = key => {
+    // this.setState(prevState => {
+    //   return {
+    //     places: prevState.places.filter(place => place.key !== key)
+    //   }
+    // });
+
+    this.setState(prevState => ({
+      selectedPlace: prevState.places.find(place => place.key === key)
+    }))
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <PlaceDetail selectedPlace={this.state.selectedPlace} />
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />
-        <PlaceList places={this.state.places} onItemDeleted={this.onItemDeleted} />
+        <PlaceList places={this.state.places} onItemSelected={this.onPlaceSelectedHandler} />
       </View>
     );
   }

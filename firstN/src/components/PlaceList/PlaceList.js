@@ -3,13 +3,13 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { ListItem } from '../ListItem/ListItem';
 
-const PlaceList = ({ places, onItemDeleted }) => {
+const PlaceList = ({ places, onItemSelected }) => {
 
 	// const placeList = places.map((place) => (
 	// 	<ListItem 
 	// 		key={place.key} 
 	// 		placeName={place.value}
-	// 		onItemPressed={() => onItemDeleted(place.key)}
+	// 		onItemPressed={() => onItemSelected(place.key)}
 	// 	></ListItem>
 	// ));
 
@@ -22,7 +22,7 @@ const PlaceList = ({ places, onItemDeleted }) => {
 				<ListItem 
 					placeName={item.name}
 					placeImage={item.image}
-					onItemPressed={() => onItemDeleted(item.key)}
+					onItemPressed={() => onItemSelected(item.key)}
 				></ListItem>
 			)}
 		>
