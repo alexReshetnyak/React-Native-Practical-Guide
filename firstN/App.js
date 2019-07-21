@@ -56,9 +56,15 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <PlaceDetail selectedPlace={this.state.selectedPlace} />
+        {
+          this.state.selectedPlace && 
+          <PlaceDetail selectedPlace={this.state.selectedPlace} />
+        }
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />
-        <PlaceList places={this.state.places} onItemSelected={this.onPlaceSelectedHandler} />
+        <PlaceList 
+          places={this.state.places} 
+          onItemSelected={this.onPlaceSelectedHandler} 
+        />
       </View>
     );
   }
