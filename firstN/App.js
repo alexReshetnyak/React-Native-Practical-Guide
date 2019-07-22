@@ -42,24 +42,32 @@ export default class App extends Component {
   }
 
   onPlaceSelectedHandler = key => {
-    // this.setState(prevState => {
-    //   return {
-    //     places: prevState.places.filter(place => place.key !== key)
-    //   }
-    // });
-
     this.setState(prevState => ({
       selectedPlace: prevState.places.find(place => place.key === key)
     }))
   }
 
+  onPlaceDeletedHandler = () => {
+    this.setState(prevState => {
+      return {
+        places: prevState.places.filter(place => place.key !== this.state.selectedPlace.key),
+        selectedPlace: null
+      }
+    });
+  }
+
+  onModalClosedHandler = () => {
+    this.setState({ selectedPlace: null });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        {
-          this.state.selectedPlace && 
-          <PlaceDetail selectedPlace={this.state.selectedPlace} />
-        }
+        <PlaceDetail 
+          selectedPlace={this.state.selectedPlace}
+          onItemDeleted={this.onPlaceDeletedHandler}
+          onModalClosed={this.onModalClosedHandler} 
+        />
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />
         <PlaceList 
           places={this.state.places} 
