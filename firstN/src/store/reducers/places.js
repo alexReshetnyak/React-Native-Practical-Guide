@@ -1,4 +1,5 @@
 import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
+// import placeImage from './src/assets/Screenshot_1.png'; // * will create js object with path property
 
 const initialState = {
   places: [],
