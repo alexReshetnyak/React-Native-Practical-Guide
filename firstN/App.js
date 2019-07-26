@@ -1,7 +1,7 @@
 
 // * to reload device set live reload (ctrl + m) or press rr
 // * to resolve watchers issue use:  echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-// ? Debug: react-devtools //////////////// Debug JS Remotely
+// ? Debug: react-devtools //////////////// Debug JS Remotely better to use react-native-debbuger
 
 import React, {Component} from 'react';
 import {
@@ -65,15 +65,15 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = state => ({
-  places: state.places.places,
-  selectedPlace: state.places.selectedPlace
+  places:         state.places.places,
+  selectedPlace:  state.places.selectedPlace
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddPlace: (name) => dispatch(addPlace(name)),
-  onDeletePlace: () => dispatch(deletePlace()),
-  onSelectPlace: (key) => dispatch(selectPlace(key)),
-  onDeselectPlace: () => dispatch(deselectPlace()),
+  onAddPlace:     (name) => dispatch(addPlace(name)),
+  onDeletePlace:      () => dispatch(deletePlace()),
+  onSelectPlace:   (key) => dispatch(selectPlace(key)),
+  onDeselectPlace:    () => dispatch(deselectPlace()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
