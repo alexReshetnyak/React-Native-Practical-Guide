@@ -7,7 +7,8 @@
 import { Navigation } from "react-native-navigation";
 
 // import configureStore from './src/store/configureStore';
-import { AuthScreen } from '../firstN/src/screens/Auth/Auth';
+// import { AuthScreen } from '../firstN/src/screens/Auth/Auth';
+import { registerScreens } from './src/navigation/screens';
 
 // const store = configureStore();
 
@@ -18,39 +19,71 @@ import { AuthScreen } from '../firstN/src/screens/Auth/Auth';
 //   </Provider>
 // );
 
-Navigation.registerComponent(`navigation.auth.AuthScreen`, () => AuthScreen);
 
-const screens = [{
-  component: {
-    name: "navigation.auth.AuthScreen",
-    options: {
-      topBar: {
-        title: {
-          text: 'Login',
-          color: 'red',
-          fontSize: 18,
-          alignment: 'center'|'fill'
-        },
-        background: {
-          color: '#0079f3'
-        }
-      }
-    }
-  }
-}];
-
+registerScreens();
 
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setRoot({
     root: {
       stack: {
-        options: {
-          topBar: {
-            visible: true
+        id: 'AuthScreenId',
+        children: [
+          {
+            component: {
+              name: 'AuthScreen',
+              options: {
+                topBar: {
+                  title: {
+                    text: 'Login',
+                    color: '#FFBC42',
+                    fontSize: 24,
+                    alignment: 'center'
+                  },
+                  background: {
+                    color: '#424242'
+                  }
+                }
+              }
+            },
           }
-        },
-        children: screens
+        ],
       }
     }
   });
 });
+
+// * multiple screens
+// const screens = [{
+//   component: {
+//     name: "AuthScreen",
+//     options: {
+//       topBar: {
+//         title: {
+//           text: 'Login',
+//           color: '#FFBC42',
+//           fontSize: 24,
+//           alignment: 'center'
+//         },
+//         background: {
+//           color: '#424242'
+//         }
+//       }
+//     }
+//   }
+// }];
+
+// Navigation.events().registerAppLaunchedListener(() => {
+  //   Navigation.setRoot({
+    //     root: {
+//       stack: {
+//         options: {
+//           topBar: {
+//             visible: true
+//           }
+//         },
+//         children: screens
+//       }
+//     }
+//   });
+// });
+
