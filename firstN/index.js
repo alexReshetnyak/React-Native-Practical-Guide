@@ -2,10 +2,12 @@
  * @format
  */
 import React from 'react';
-import { AppRegistry } from 'react-native';
+// import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
+import { Navigation } from "react-native-navigation";
+
 import App from './App';
-import { name as firstApp } from './app.json';
+// import { name as firstApp } from './app.json';
 import configureStore from './src/store/configureStore';
 
 const store = configureStore();
@@ -17,4 +19,15 @@ const ReactNativeRedux = () => (
   </Provider>
 );
 
-AppRegistry.registerComponent(firstApp, () => ReactNativeRedux);
+// AppRegistry.registerComponent(firstApp, () => ReactNativeRedux);
+Navigation.registerComponent(`navigation.playground.WelcomeScreen`, () => ReactNativeRedux);
+
+Navigation.events().registerAppLaunchedListener(() => {
+  Navigation.setRoot({
+    root: {
+      component: {
+        name: "navigation.playground.WelcomeScreen"
+      }
+    }
+  });
+});
