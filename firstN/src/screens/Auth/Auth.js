@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
-import { goToFindPlace } from '../../navigation/navigation';
+import { goHome } from '../../navigation/navigation';
 
 class AuthScreen extends Component {
+  
   loginHandler = () => {
-    goToFindPlace();
+    goHome();
   }
-
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     goHome();  
-  //   }, 5000);
-  // }
 
   render() {
     return (

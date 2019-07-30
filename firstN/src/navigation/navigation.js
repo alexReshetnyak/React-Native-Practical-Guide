@@ -1,122 +1,163 @@
-import { Navigation } from 'react-native-navigation'
+import { Navigation } from 'react-native-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-export const goHome = () => Navigation.setRoot({
-  root: {
-    bottomTabs: {
-      id: 'HomeId',
-      children: [
-        {
-          component: {
-            name: 'FindPlaceScreen',
-            // children: [],
-            options: {
-              bottomTab: {
-                fontSize: 12,
-                text: 'Find Place',
-                icon: require('../assets/Screenshot_1.png')
-              }
-            }
-          },
+
+const getFindPlaceScreen = async () => ({
+  component: {
+    name: 'FindPlaceScreen',
+    // children: [],
+    options: {
+      bottomTab: {
+        fontSize: 12,
+        text: 'Find Place',
+        // icon: require('../assets/Screenshot_1.png')
+        icon: await Icon.getImageSource('md-map', 30, 'green')
+      },
+      topBar: {
+        title: {
+          text: 'Find Place',
+          color: '#FFBC42',
+          fontSize: 24,
+          alignment: 'center'
         },
-        {
-          component: {
-            name: 'SharePlaceScreen',
-            // children: [],
-            options: {
-              bottomTab: {
-                fontSize: 12,
-                text: 'Share Place',
-                icon: require('../assets/Screenshot_1.png')
-              },
-            }
-          },
+        background: {
+          color: '#424242'
+        }
+      }
+    }
+  }
+});
+
+const getSharePlaceScreen = async () => ({
+  component: {
+    name: 'SharePlaceScreen',
+    // children: [],
+    options: {
+      bottomTab: {
+        fontSize: 12,
+        text: 'Share Place',
+        icon: await Icon.getImageSource('ios-share-alt', 30, 'blue')
+      },
+      topBar: {
+        title: {
+          text: 'Share Place',
+          color: '#FFBC42',
+          fontSize: 24,
+          alignment: 'center'
         },
-      ],
+        background: {
+          color: '#424242'
+        }
+      }
     }
   }
 });
 
+const getAuthScreen = () => ({
+    component: {
+      name: 'AuthScreen',
+      options: {
+        topBar: {
+          title: {
+            text: 'Login',
+            color: '#FFBC42',
+            fontSize: 24,
+            alignment: 'center'
+          },
+          background: {
+            color: '#424242'
+          }
+        }
+      }
+    }
+});
 
-export const goToFindPlace = () => Navigation.setRoot({
-  root: {
-    stack: {
-      id: 'FindPlaceId',
-      children: [
-        {
-          component: {
-            name: 'FindPlaceScreen',
-            options: {
-              topBar: {
-                title: {
-                  text: 'Find Place',
-                  color: '#FFBC42',
-                  fontSize: 24,
-                  alignment: 'center'
-                },
-                background: {
-                  color: '#424242'
-                }
-              }
+export const goHome = async () => {
+  Navigation.setRoot({
+    root: {
+      bottomTabs: {
+        id: 'HomeId',
+        children: [
+          {
+            stack: {
+              id: 'findPlaceId',
+              children: [await getFindPlaceScreen()]
             }
           },
-        }
-      ],
-    }
-  }
-});
-
-export const goToSharePlace = () => Navigation.setRoot({
-  root: {
-    stack: {
-      id: 'SharePlaceId',
-      children: [
-        {
-          component: {
-            name: 'SharePlaceScreen',
-            options: {
-              topBar: {
-                title: {
-                  text: 'Share Place',
-                  color: '#FFBC42',
-                  fontSize: 24,
-                  alignment: 'center'
-                },
-                background: {
-                  color: '#424242'
-                }
-              }
+          {
+            stack: {
+              id: 'SharePlaceId',
+              children: [await getSharePlaceScreen()]
             }
-          },
-        }
-      ],
+          }
+        ]
+      }
     }
-  }
-});
+  });
+};
 
 export const goToAuth = () => Navigation.setRoot({
   root: {
     stack: {
       id: 'AuthScreenId',
-      children: [
-        {
-          component: {
-            name: 'AuthScreen',
-            options: {
-              topBar: {
-                title: {
-                  text: 'Login',
-                  color: '#FFBC42',
-                  fontSize: 24,
-                  alignment: 'center'
-                },
-                background: {
-                  color: '#424242'
-                }
-              }
-            }
-          },
-        }
-      ],
+      children: [getAuthScreen()],
     }
   }
 });
+
+// export const goToFindPlace = () => Navigation.setRoot({
+//   root: {
+//     stack: {
+//       id: 'FindPlaceId',
+//       children: [
+//         {
+//           component: {
+//             name: 'FindPlaceScreen',
+//             options: {
+//               topBar: {
+//                 title: {
+//                   text: 'Find Place',
+//                   color: '#FFBC42',
+//                   fontSize: 24,
+//                   alignment: 'center'
+//                 },
+//                 background: {
+//                   color: '#424242'
+//                 }
+//               }
+//             }
+//           },
+//         }
+//       ],
+//     }
+//   }
+// });
+
+// export const goToSharePlace = () => Navigation.setRoot({
+//   root: {
+//     stack: {
+//       id: 'SharePlaceId',
+//       children: [
+//         {
+//           component: {
+//             name: 'SharePlaceScreen',
+//             options: {
+//               topBar: {
+//                 title: {
+//                   text: 'Share Place',
+//                   color: '#FFBC42',
+//                   fontSize: 24,
+//                   alignment: 'center'
+//                 },
+//                 background: {
+//                   color: '#424242'
+//                 }
+//               }
+//             }
+//           },
+//         }
+//       ],
+//     }
+//   }
+// });
+
