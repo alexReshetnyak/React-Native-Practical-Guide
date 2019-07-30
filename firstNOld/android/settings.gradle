@@ -1,4 +1,4 @@
-rootProject.name = 'firstN'
+rootProject.name = 'firstNOld'
 
 include ':app'
 
