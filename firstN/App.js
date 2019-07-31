@@ -17,7 +17,7 @@ Navigation.events().registerAppLaunchedListener(() => {
         children: [
           {
             component: {
-              name: 'AuthScreen',
+              name: 'navigation.AuthScreen',
               options: {
                 topBar: {
                   title: {

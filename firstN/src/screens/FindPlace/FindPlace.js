@@ -11,7 +11,7 @@ class FindPlaceScreen extends Component {
 
     Navigation.push(this.props.componentId, {
       component: {
-        name: 'PlaceDetailScreen',
+        name: 'navigation.PlaceDetailScreen',
         passProps: {
           selectedPlace
         },

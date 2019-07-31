@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const getFindPlaceScreen = async () => ({
   component: {
-    name: 'FindPlaceScreen',
+    name: 'navigation.FindPlaceScreen',
     // children: [],
     options: {
       bottomTab: {
@@ -30,7 +30,7 @@ const getFindPlaceScreen = async () => ({
 
 const getSharePlaceScreen = async () => ({
   component: {
-    name: 'SharePlaceScreen',
+    name: 'navigation.SharePlaceScreen',
     // children: [],
     options: {
       bottomTab: {
@@ -47,7 +47,13 @@ const getSharePlaceScreen = async () => ({
         },
         background: {
           color: '#424242'
-        }
+        },
+        rightButtons: [
+          {
+            id: 'openSideDrawer',
+            icon: await Icon.getImageSource('ios-menu', 30, 'orange')
+          }
+        ]
       }
     }
   }
@@ -55,7 +61,7 @@ const getSharePlaceScreen = async () => ({
 
 const getAuthScreen = () => ({
     component: {
-      name: 'AuthScreen',
+      name: 'navigation.AuthScreen',
       options: {
         topBar: {
           title: {
@@ -75,22 +81,33 @@ const getAuthScreen = () => ({
 export const goHome = async () => {
   Navigation.setRoot({
     root: {
-      bottomTabs: {
-        id: 'HomeId',
-        children: [
-          {
-            stack: {
-              id: 'findPlaceId',
-              children: [await getFindPlaceScreen()]
-            }
-          },
-          {
-            stack: {
-              id: 'SharePlaceId',
-              children: [await getSharePlaceScreen()]
-            }
+      sideMenu: {
+        id: 'sideDrawerId',
+        left: {
+          component: {
+            id: 'sideDrawer',
+            name: 'navigation.SideDrawer'
           }
-        ]
+        },
+        center: {
+          bottomTabs: {
+            id: 'HomeId',
+            children: [
+              {
+                stack: {
+                  id: 'findPlaceId',
+                  children: [await getFindPlaceScreen()]
+                }
+              },
+              {
+                stack: {
+                  id: 'SharePlaceId',
+                  children: [await getSharePlaceScreen()]
+                }
+              }
+            ]
+          }
+        }
       }
     }
   });
