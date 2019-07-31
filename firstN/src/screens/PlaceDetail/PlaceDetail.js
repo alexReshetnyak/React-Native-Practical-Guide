@@ -1,26 +1,41 @@
-import React from 'react';
-import { View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { Component } from 'react';
+import { View, Image, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux';
+import { Navigation } from 'react-native-navigation';
 
-const PlaceDetailScreen = ({selectedPlace, onItemDeleted}) => {
-  return (
-    <View style={styles.container}>
-      <View>
-        <Image 
-          source={selectedPlace ? selectedPlace.image : null}
-          style={styles.placeImage} 
-        />
-        <Text style={styles.placeName}>{selectedPlace ? selectedPlace.name : null}</Text>
+import { deletePlace } from '../../store/actions';
+
+class PlaceDetailScreen extends Component {
+
+  placeDeleteHandler = () => {
+    this.props.onDeletePlace(this.props.selectedPlace.key);
+    // * Remove component from navigation stack
+    Navigation.pop(this.props.componentId); 
+  }
+  
+  render() {
+    const { selectedPlace } = this.props;
+
+    return (
+      <View style={styles.container}>
+        <View>
+          <Image 
+            source={selectedPlace ? selectedPlace.image : null}
+            style={styles.placeImage} 
+          />
+          <Text style={styles.placeName}>{selectedPlace ? selectedPlace.name : null}</Text>
+        </View>
+        <View>
+          <TouchableOpacity onPress={this.placeDeleteHandler}>
+            <View style={styles.deleteButton}>
+              <Icon size={30} name='ios-trash' color='red' />
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View>
-        <TouchableOpacity onPress={onItemDeleted}>
-          <View style={styles.deleteButton}>
-            <Icon size={30} name='ios-trash' color='red' />
-          </View>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -40,5 +55,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   }
 });
- 
+
+const mapDispatchToProps = dispatch => ({
+  onDeletePlace: key => dispatch(deletePlace(key))
+});
+
+
+PlaceDetailScreen = connect(null, mapDispatchToProps)(PlaceDetailScreen);
+
 export { PlaceDetailScreen };
