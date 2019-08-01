@@ -15,7 +15,7 @@ class SharePlaceScreen extends Component {
   }
   
   navigationButtonPressed({ buttonId }) {
-    if (buttonId === "openSideDrawer") {
+    if (buttonId === "openSideDrawerButton") {
       SideDrawer.showSideDrawer(this.props.componentId);
     }
   }
@@ -24,7 +24,7 @@ class SharePlaceScreen extends Component {
     this.props.onAddPlace(placeName)
   }
   
-  render() { 
+  render() {
     return (
       <View>
         <PlaceInput onPlaceAdded={this.placeAddedHandler} />

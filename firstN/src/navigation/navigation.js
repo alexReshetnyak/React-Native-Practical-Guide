@@ -25,7 +25,7 @@ const getFindPlaceScreen = async () => ({
         },
         rightButtons: [
           {
-            id: 'openSideDrawer',
+            id: 'openSideDrawerButton',
             icon: await Icon.getImageSource('ios-menu', 30, 'orange')
           }
         ]
@@ -56,7 +56,7 @@ const getSharePlaceScreen = async () => ({
         },
         rightButtons: [
           {
-            id: 'openSideDrawer',
+            id: 'openSideDrawerButton',
             icon: await Icon.getImageSource('ios-menu', 30, 'orange')
           }
         ]

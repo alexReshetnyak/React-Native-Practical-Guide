@@ -15,7 +15,7 @@ class FindPlaceScreen extends Component {
   }
   
   navigationButtonPressed({ buttonId }) {
-    if (buttonId === "openSideDrawer") {
+    if (buttonId === "openSideDrawerButton") {
       SideDrawer.showSideDrawer(this.props.componentId);
     }
   }
@@ -23,10 +23,9 @@ class FindPlaceScreen extends Component {
   itemSelectedHandler = key => {
     const selectedPlace = this.props.places.find(place => place.key === key);
 
-    Navigation.push(
-      this.props.componentId, 
-      PlaceDetailScreen.getNavigationComponent(selectedPlace)
-    );
+    PlaceDetailScreen.getNavigationComponent(selectedPlace).then(navComponent =>{
+      Navigation.push(this.props.componentId, navComponent);
+    });
   }
 
   render() { 
