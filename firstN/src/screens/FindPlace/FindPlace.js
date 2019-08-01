@@ -4,32 +4,29 @@ import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
 import { PlaceList } from '../../components/PlaceList/PlaceList';
+import { SideDrawer } from '../SideDrawer/SideDrawer';
+import { PlaceDetailScreen } from '../PlaceDetail/PlaceDetail';
 
 class FindPlaceScreen extends Component {
+  
+  constructor(props) {
+    super(props);
+    Navigation.events().bindComponent(this);
+  }
+  
+  navigationButtonPressed({ buttonId }) {
+    if (buttonId === "openSideDrawer") {
+      SideDrawer.showSideDrawer(this.props.componentId);
+    }
+  }
+
   itemSelectedHandler = key => {
     const selectedPlace = this.props.places.find(place => place.key === key);
 
-    Navigation.push(this.props.componentId, {
-      component: {
-        name: 'navigation.PlaceDetailScreen',
-        passProps: {
-          selectedPlace
-        },
-        options: {
-          topBar: {
-            title: {
-              text: selectedPlace.name,
-              color: '#FFBC42',
-              fontSize: 24,
-              alignment: 'center'
-            },
-            background: {
-              color: '#424242'
-            }
-          }
-        }
-      }
-    });
+    Navigation.push(
+      this.props.componentId, 
+      PlaceDetailScreen.getNavigationComponent(selectedPlace)
+    );
   }
 
   render() { 

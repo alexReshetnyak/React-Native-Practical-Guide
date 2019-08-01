@@ -8,6 +8,38 @@ import { deletePlace } from '../../store/actions';
 
 class PlaceDetailScreen extends Component {
 
+  /**
+   * Get PlaceDetail object for navigation
+   *
+   * @param {Object} selectedPlace - selected place object { key: 'string', name: 'string', image: object }
+   * @return {Object} PlaceDetail object for navigation
+   *
+   * @example
+   *
+   *     getNavigationComponent({ key: 'string', name: 'string', image: object })
+   */
+  static getNavigationComponent = selectedPlace => ({
+    component: {
+      name: 'navigation.PlaceDetailScreen',
+      passProps: {
+        selectedPlace
+      },
+      options: {
+        topBar: {
+          title: {
+            text: selectedPlace.name,
+            color: '#FFBC42',
+            fontSize: 24,
+            alignment: 'center'
+          },
+          background: {
+            color: '#424242'
+          }
+        }
+      }
+    }
+  });
+
   placeDeleteHandler = () => {
     this.props.onDeletePlace(this.props.selectedPlace.key);
     // * Remove component from navigation stack

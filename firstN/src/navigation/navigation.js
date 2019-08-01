@@ -22,7 +22,13 @@ const getFindPlaceScreen = async () => ({
         },
         background: {
           color: '#424242'
-        }
+        },
+        rightButtons: [
+          {
+            id: 'openSideDrawer',
+            icon: await Icon.getImageSource('ios-menu', 30, 'orange')
+          }
+        ]
       }
     }
   }
