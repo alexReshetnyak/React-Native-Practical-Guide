@@ -11,17 +11,20 @@ class SharePlaceScreen extends Component {
 
   constructor(props) {
     super(props);
-    Navigation.events().bindComponent(this);
+    this.navigationEventListener = Navigation.events().bindComponent(this);
   }
-  
+
   navigationButtonPressed({ buttonId }) {
-    if (buttonId === "openSideDrawerButton") {
+    buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
-    }
   }
   
   placeAddedHandler = placeName => {
     this.props.onAddPlace(placeName)
+  }
+
+  componentWillUnmount() {
+    this.navigationEventListener && this.navigationEventListener.remove();
   }
   
   render() {

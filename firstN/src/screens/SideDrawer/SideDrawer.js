@@ -5,7 +5,6 @@ import { Navigation } from 'react-native-navigation';
 
 class SideDrawer extends Component {
   // static isSideDrawerVisible = false;
-
   /**
    * Show side drawer menu
    *
@@ -17,7 +16,6 @@ class SideDrawer extends Component {
    */
   static showSideDrawer = componentId => {
     // SideDrawer.isSideDrawerVisible = !SideDrawer.isSideDrawerVisible;
-
     Navigation.mergeOptions(componentId, {
       sideMenu: {
         left: {

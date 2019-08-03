@@ -53,9 +53,8 @@ class PlaceDetailScreen extends Component {
   }
   
   navigationButtonPressed({ buttonId }) {
-    if (buttonId === "openSideDrawerButton") {
+    buttonId === "openSideDrawerButton" && 
       SideDrawer.showSideDrawer(this.props.componentId);
-    }
   }
 
   placeDeleteHandler = () => {
