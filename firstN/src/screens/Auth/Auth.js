@@ -1,34 +1,48 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet, ImageBackground } from 'react-native';
 
 import { goHome } from '../../navigation/navigation';
 import { DefaultInput } from '../../components/UI/DefaultInput/DefaultInput';
 import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
 import { MainText } from '../../components/UI/MainText/MainText';
+import backgroundImage from '../../assets/background.jpg';
+import {ButtonWithBackground} from '../../components/UI/ButtonWithBackground/ButtonWithBackground'
 
 class AuthScreen extends Component {
-  
+
   loginHandler = () => {
     goHome();
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <MainText>
-          <HeadingText>Please Log In</HeadingText>
-        </MainText>
+      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+        <View style={styles.container}>
+            <MainText>
+              <HeadingText style={{color: 'white'}}>Please Log In</HeadingText>
+            </MainText>
 
-        <Button title='Switch to Login'/>
-        
-        <View style={styles.inputContainer}>
-          <DefaultInput style={styles.input} placeholder="Password"/>
-          <DefaultInput style={styles.input} placeholder="Confirm Password"/>
-          <DefaultInput style={[styles.input, {backgroundColor: 'white'}]} placeholder="Your E-Mail Address"/>
+            <ButtonWithBackground 
+              style={{ backgroundColor: '#424242', color: 'white'}}
+              onPress={() => alert('Hello')}
+            >
+              Switch to Login
+            </ButtonWithBackground>
+            
+            <View style={styles.inputContainer}>
+              <DefaultInput style={styles.input} placeholder="Password"/>
+              <DefaultInput style={styles.input} placeholder="Confirm Password"/>
+              <DefaultInput style={[styles.input, {backgroundColor: 'white'}]} placeholder="Your E-Mail Address"/>
+            </View>
+            
+            <ButtonWithBackground 
+              onPress={this.loginHandler} 
+              style={{ backgroundColor: '#424242', color: 'white'}}
+            >
+              Submit
+            </ButtonWithBackground>
         </View>
-        
-        <Button title='Submit' onPress={this.loginHandler}/>
-      </View>
+      </ImageBackground>
     );
   }
 }
@@ -43,6 +57,10 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%'
+  },
+  backgroundImage: {
+    width: '100%',
+    flex: 1
   },
   input: {
     backgroundColor: '#eee',
