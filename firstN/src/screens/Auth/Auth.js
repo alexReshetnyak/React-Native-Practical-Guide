@@ -23,8 +23,8 @@ class AuthScreen extends Component {
             </MainText>
 
             <ButtonWithBackground 
-              style={{ backgroundColor: '#424242', color: 'white'}}
               onPress={() => alert('Hello')}
+              style={{ backgroundColor: '#424242', color: 'white'}}
             >
               Switch to Login
             </ButtonWithBackground>
