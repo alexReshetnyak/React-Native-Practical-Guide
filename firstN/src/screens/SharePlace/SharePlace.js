@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Button, StyleSheet, ScrollView } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 
 import { addPlace } from '../../store/actions';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
-import { DefaultInput } from '../../components/UI/DefaultInput/DefaultInput'
 import { MainText } from '../../components/UI/MainText/MainText';
 import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
-import imagePlaceHolder from '../../assets/background.jpg';
+import { PlaceInput } from '../../components/PlaceInput/PlaceInput';
+import { PickImage } from '../../components/PickImage/PickImage';
+import { PickLocation } from '../../components/PickLocation/PickLocation';
 
 class SharePlaceScreen extends Component {
 
@@ -17,17 +18,30 @@ class SharePlaceScreen extends Component {
     this.navigationEventListener = Navigation.events().bindComponent(this);
   }
 
+  state = {
+    placeName: ''
+  }
+
   navigationButtonPressed({ buttonId }) {
     buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
   }
   
-  placeAddedHandler = placeName => {
-    this.props.onAddPlace(placeName)
+  placeAddedHandler = () => {
+    if (this.state.placeName.trim()) {
+      this.props.onAddPlace(this.state.placeName) 
+      this.setState({placeName: ''})
+    }
   }
 
   componentWillUnmount() {
     this.navigationEventListener && this.navigationEventListener.remove();
+  }
+
+  onChangePlaceNameHandler = (newName) => {
+    this.setState({
+      placeName: newName
+    });
   }
   
   render() {
@@ -39,26 +53,15 @@ class SharePlaceScreen extends Component {
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
           
-          <View style={styles.placeholder}>
-            <Image source={imagePlaceHolder} style={styles.previewImage}/>
-          </View>
+          <PickImage/>
+          <PickLocation/>
+          <PlaceInput 
+            placeName={this.state.placeName} 
+            onChangeText={this.onChangePlaceNameHandler} 
+          />
           
           <View style={styles.button}>
-            <Button title='Pick Image'/>
-          </View>
-          
-          <View style={styles.placeholder}>
-            <Text>Map</Text>
-          </View>
-          
-          <View style={styles.button}>
-            <Button title='Locate me'/>
-          </View>
-
-          <DefaultInput placeholder='Place Name'/>
-          
-          <View style={styles.button}>
-            <Button title='Share the place!'/>
+            <Button title='Share the place!' onPress={this.placeAddedHandler}/>
           </View>
         </View>
       </ScrollView>
@@ -80,10 +83,6 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: 8
-  },
-  previewImage: {
-    width: '100%',
-    height: '100%'
   }
 });
 

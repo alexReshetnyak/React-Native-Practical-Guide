@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet, ImageBackground } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 
 import { goHome } from '../../navigation/navigation';
 import { DefaultInput } from '../../components/UI/DefaultInput/DefaultInput';
 import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
 import { MainText } from '../../components/UI/MainText/MainText';
+import { ButtonWithBackground } from '../../components/UI/ButtonWithBackground/ButtonWithBackground';
 import backgroundImage from '../../assets/background.jpg';
-import {ButtonWithBackground} from '../../components/UI/ButtonWithBackground/ButtonWithBackground'
 
 class AuthScreen extends Component {
 
