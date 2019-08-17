@@ -2,6 +2,7 @@
 // * to reload device set live reload (ctrl + m) or press rr
 // * to resolve watchers issue use:  echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 // ? Debug: react-devtools //////////////// Debug JS Remotely better to use react-native-debbuger
+// * NativeBase.io - cross platform UI library
 
 import { Navigation } from "react-native-navigation";
 import { registerScreens } from './src/navigation/screens';

@@ -5,7 +5,7 @@ import { Navigation } from 'react-native-navigation';
 
 import { PlaceList } from '../../components/PlaceList/PlaceList';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
-import { PlaceDetailScreen } from '../PlaceDetail/PlaceDetail';
+import { getPlaceDetailScreen } from '../../navigation/homeScreens';
 
 class FindPlaceScreen extends Component {
   
@@ -23,7 +23,7 @@ class FindPlaceScreen extends Component {
   itemSelectedHandler = key => {
     const selectedPlace = this.props.places.find(place => place.key === key);
 
-    PlaceDetailScreen.getNavigationComponent(selectedPlace).then(navComponent =>{
+    getPlaceDetailScreen(selectedPlace).then(navComponent =>{
       Navigation.push(this.props.componentId, navComponent);
     });
   }

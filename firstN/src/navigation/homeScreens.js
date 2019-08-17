@@ -1,14 +1,14 @@
 import { Platform } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
 
-let findPlaceIconName = 'ios-map';
-let sharePlaceIconName = 'ios-share-alt';
-let menuIconName = 'ios-menu';
+let findPlaceIconName   = 'ios-map';
+let sharePlaceIconName  = 'ios-share-alt';
+let menuIconName        = 'ios-menu';
 
 if (Platform.OS === 'android') {
-  findPlaceIconName = 'md-map';
-  sharePlaceIconName = 'md-share-alt';
-  menuIconName = 'md-menu';
+  findPlaceIconName   = 'md-map';
+  sharePlaceIconName  = 'md-share-alt';
+  menuIconName        = 'md-menu';
 }
 
 /**
