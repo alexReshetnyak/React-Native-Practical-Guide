@@ -9,44 +9,6 @@ import { SideDrawer } from '../SideDrawer/SideDrawer'
 
 class PlaceDetailScreen extends Component {
 
-  /**
-   * Get PlaceDetail object for navigation
-   *
-   * @param {Object} selectedPlace - selected place object { key: 'string', name: 'string', image: object }
-   * @return {Object} PlaceDetail promise object for navigation
-   *
-   * @example
-   *
-   *     getNavigationComponent({ key: 'string', name: 'string', image: object })
-   */
-  static getNavigationComponent = async selectedPlace => ({
-    component: {
-      name: 'navigation.PlaceDetailScreen',
-      passProps: {
-        selectedPlace
-      },
-      options: {
-        topBar: {
-          title: {
-            text: selectedPlace.name,
-            color: '#FFBC42',
-            fontSize: 24,
-            alignment: 'center'
-          },
-          background: {
-            color: '#424242'
-          },
-          rightButtons: [
-            {
-              id: 'openSideDrawerButton',
-              icon: await Icon.getImageSource('ios-menu', 30, 'orange')
-            }
-          ]
-        }
-      }
-    }
-  });
-
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);

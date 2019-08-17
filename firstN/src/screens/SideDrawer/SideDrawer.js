@@ -32,7 +32,7 @@ class SideDrawer extends Component {
         <TouchableOpacity>
           <View style={styles.drawItem}>
             <Icon 
-              name='ios-log-out' 
+              name='ios-log-out'
               size={30} 
               color='#aaa'
               style={styles.drawItemIcon}
