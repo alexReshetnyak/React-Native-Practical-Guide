@@ -1,3 +1,11 @@
+/**
+ * Get AuthScreen object for navigation
+ *
+ * @return {Object} AuthScreen promise object for navigation
+ *
+ * @example
+ *     getAuthScreen()
+ */
 export const getAuthScreen = () => ({
   component: {
     name: 'navigation.AuthScreen',
