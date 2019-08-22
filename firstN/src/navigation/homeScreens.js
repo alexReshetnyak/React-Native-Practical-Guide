@@ -66,9 +66,15 @@ export const getSharePlaceScreen = async () => ({
     // children: [],
     options: {
       bottomTab: {
-        fontSize: 12,
+        fontSize: 15,
         text: 'Share Place',
-        icon: await Icon.getImageSource(sharePlaceIconName, 30, 'blue')
+        textColor: 'red',
+        selectedTextColor: 'blue',
+        selectedIconColor: 'blue',
+        badge: '2',
+        badgeColor: 'red',
+        icon: await Icon.getImageSource(sharePlaceIconName, 30, 'red'),
+        disabledColor: 'blue',
       },
       topBar: {
         title: {

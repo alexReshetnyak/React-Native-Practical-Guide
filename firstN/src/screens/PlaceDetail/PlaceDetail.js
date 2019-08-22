@@ -22,7 +22,7 @@ class PlaceDetailScreen extends Component {
   placeDeleteHandler = () => {
     this.props.onDeletePlace(this.props.selectedPlace.key);
     // * Remove component from navigation stack
-    Navigation.pop(this.props.componentId); 
+    Navigation.pop(this.props.componentId);
   }
   
   render() {
