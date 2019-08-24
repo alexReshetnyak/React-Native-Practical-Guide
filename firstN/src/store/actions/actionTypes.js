@@ -1,4 +1,7 @@
 
-export const ADD_PLACE = 'ADD_PLACE';
+export const ADD_PLACE    = 'ADD_PLACE';
 export const DELETE_PLACE = 'DELETE_PLACE';
 
+export const SET_COMPONENT_ID = 'SET_COMPONENT_ID';
+export const INCREASE_BADGE_NUMBER = 'INCREASE_BADGE_NUMBER';
+export const DECREASE_BADGE_NUMBER = 'DECREASE_BADGE_NUMBER';

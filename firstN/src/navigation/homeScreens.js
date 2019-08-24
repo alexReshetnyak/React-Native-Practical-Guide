@@ -25,7 +25,7 @@ export const getFindPlaceScreen = async () => ({
     // children: [],
     options: {
       bottomTab: {
-        fontSize: 12,
+        fontSize: 15,
         text: 'Find Place',
         // icon: require('../assets/Screenshot_1.png')
         icon: await Icon.getImageSource(findPlaceIconName, 30, 'green')
@@ -71,8 +71,8 @@ export const getSharePlaceScreen = async () => ({
         textColor: 'red',
         selectedTextColor: 'blue',
         selectedIconColor: 'blue',
-        badge: '2',
-        badgeColor: 'red',
+        // badge: '5',
+        // badgeColor: 'red',
         icon: await Icon.getImageSource(sharePlaceIconName, 30, 'red'),
         disabledColor: 'blue',
       },

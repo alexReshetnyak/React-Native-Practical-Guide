@@ -3,7 +3,7 @@ import { View, Button, StyleSheet, ScrollView } from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 
-import { addPlace } from '../../store/actions';
+import { addPlace, increaseBadgeNumber } from '../../store/actions';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
 import { MainText } from '../../components/UI/MainText/MainText';
 import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
@@ -27,10 +27,11 @@ class SharePlaceScreen extends Component {
       SideDrawer.showSideDrawer(this.props.componentId);
   }
   
-  placeAddedHandler = () => {
+  placeAddedHandler = async () => {
     if (this.state.placeName.trim()) {
-      this.props.onAddPlace(this.state.placeName) 
-      this.setState({placeName: ''})
+      this.props.onAddPlace(this.state.placeName);
+      this.props.onIncreaseBadgeNumber();
+      this.setState({placeName: ''});
     }
   }
 
@@ -87,7 +88,8 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddPlace: placeName => dispatch(addPlace(placeName))
+  onAddPlace: placeName => dispatch(addPlace(placeName)),
+  onIncreaseBadgeNumber: count => dispatch(increaseBadgeNumber(count))
 });
 
 SharePlaceScreen = connect(null, mapDispatchToProps)(SharePlaceScreen);

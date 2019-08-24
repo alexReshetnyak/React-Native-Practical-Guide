@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
-import { deletePlace } from '../../store/actions';
+import { deletePlace, decreaseBadgeNumber } from '../../store/actions';
 import { SideDrawer } from '../SideDrawer/SideDrawer'
 
 class PlaceDetailScreen extends Component {
@@ -15,12 +15,14 @@ class PlaceDetailScreen extends Component {
   }
   
   navigationButtonPressed({ buttonId }) {
-    buttonId === "openSideDrawerButton" && 
+    buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
   }
 
   placeDeleteHandler = () => {
     this.props.onDeletePlace(this.props.selectedPlace.key);
+    this.props.onDecreaseBadgeNumber();
+
     // * Remove component from navigation stack
     Navigation.pop(this.props.componentId);
   }
@@ -72,7 +74,8 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onDeletePlace: key => dispatch(deletePlace(key))
+  onDeletePlace: key => dispatch(deletePlace(key)),
+  onDecreaseBadgeNumber: count => dispatch(decreaseBadgeNumber(count))
 });
 
 

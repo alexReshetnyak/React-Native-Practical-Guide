@@ -6,12 +6,17 @@ import { Navigation } from 'react-native-navigation';
 import { PlaceList } from '../../components/PlaceList/PlaceList';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
 import { getPlaceDetailScreen } from '../../navigation/homeScreens';
+import { setComponentId } from '../../store/actions';
 
 class FindPlaceScreen extends Component {
   
   constructor(props) {
     super(props);
     Navigation.events().bindComponent(this);
+  }
+
+  componentDidMount() {
+    this.props.setComponentId(this.props.componentId)
   }
   
   navigationButtonPressed({ buttonId }) {
@@ -41,7 +46,11 @@ const mapStateToProps = state => ({
   places: state.places.places
 });
 
+const mapDispatchToProps = dispatch => ({
+  setComponentId: id => dispatch(setComponentId(id))
+});
 
-FindPlaceScreen = connect(mapStateToProps)(FindPlaceScreen);
+
+FindPlaceScreen = connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);
 
 export { FindPlaceScreen };
