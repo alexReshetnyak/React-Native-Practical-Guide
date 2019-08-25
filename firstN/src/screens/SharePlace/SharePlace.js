@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => ({
   onAddPlace: placeName => dispatch(addPlace(placeName)),
-  onIncreaseBadgeNumber: count => dispatch(increaseBadgeNumber(count))
+  onIncreaseBadgeNumber: () => dispatch(increaseBadgeNumber())
 });
 
 SharePlaceScreen = connect(null, mapDispatchToProps)(SharePlaceScreen);

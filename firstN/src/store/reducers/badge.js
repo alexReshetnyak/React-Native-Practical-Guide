@@ -35,16 +35,17 @@ const reducer = (state = initialState, action) => {
       };
 
       case INCREASE_BADGE_NUMBER:
+        const increasedBadgeNumber = state.badgeNumber + 1;
         Navigation.mergeOptions(state.componentId, {
           bottomTab: {
-            badge: state.badgeNumber,
+            badge: increasedBadgeNumber,
             badgeColor: 'red',
           },
         });
   
         return {
           ...state,
-          badgeNumber: state.badgeNumber + 1
+          badgeNumber: increasedBadgeNumber
         };
 
     default:
