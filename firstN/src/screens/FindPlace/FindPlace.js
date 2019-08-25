@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
@@ -9,6 +9,9 @@ import { getPlaceDetailScreen } from '../../navigation/homeScreens';
 import { setComponentId } from '../../store/actions';
 
 class FindPlaceScreen extends Component {
+  state = {
+    placesLoaded: false
+  }
   
   constructor(props) {
     super(props);
@@ -33,10 +36,26 @@ class FindPlaceScreen extends Component {
     });
   }
 
-  render() { 
+  placesSearchHandler = () => {
+    this.setState({
+      placesLoaded: true
+    });
+  }
+  
+  render() {
+    let content = (
+      <TouchableOpacity onPress={this.placesSearchHandler}>
+        <View style={styles.searchButton}>
+          <Text style={styles.searchButtonText}>Find Places</Text>
+        </View>
+      </TouchableOpacity>
+    );
+    if(this.state.placesLoaded) {
+      content = <PlaceList places={this.props.places} onItemSelected={this.itemSelectedHandler} />
+    }
     return (
-      <View>
-        <PlaceList places={this.props.places} onItemSelected={this.itemSelectedHandler} />
+      <View style={this.state.placesLoaded ? null : styles.buttonContainer}>
+        {content}
       </View>
     );
   }
@@ -48,6 +67,25 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setComponentId: id => dispatch(setComponentId(id))
+});
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  searchButton: {
+    borderColor: 'orange',
+    borderWidth: 3,
+    borderRadius: 50,
+    padding: 20
+  },
+  searchButtonText: {
+    color: 'orange',
+    fontWeight: 'bold',
+    fontSize: 26
+  }
 });
 
 

@@ -27,8 +27,11 @@ export const getFindPlaceScreen = async () => ({
       bottomTab: {
         fontSize: 15,
         text: 'Find Place',
+        textColor: 'red',
+        selectedTextColor: 'green',
+        selectedIconColor: 'green',
         // icon: require('../assets/Screenshot_1.png')
-        icon: await Icon.getImageSource(findPlaceIconName, 30, 'green')
+        icon: await Icon.getImageSource(findPlaceIconName, 30, 'red')
       },
       topBar: {
         title: {
