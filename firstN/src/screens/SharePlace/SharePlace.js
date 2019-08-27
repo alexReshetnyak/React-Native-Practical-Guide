@@ -22,7 +22,7 @@ class SharePlaceScreen extends Component {
     placeName: ''
   }
 
-  navigationButtonPressed({ buttonId }) {
+  navigationButtonPressed({ buttonId }) { // * Navigation method
     buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
   }
