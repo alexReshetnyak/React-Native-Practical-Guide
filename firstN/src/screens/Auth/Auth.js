@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { View, ImageBackground, Dimensions } from "react-native";
+import { View, ImageBackground, Dimensions, Text } from "react-native";
 
+import { authStyles } from "./AuthStyles";
 import { goHome } from "../../navigation/navigation";
 import { DefaultInput } from "../../components/UI/DefaultInput/DefaultInput";
 import { HeadingText } from "../../components/UI/HeadingText/HeadingText";
 import { MainText } from "../../components/UI/MainText/MainText";
 import { ButtonWithBackground } from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
-import { authStyles } from "./AuthStyles";
 import { validateFormValue } from "../../utility/validation";
 import { authFormControls } from "./AuthFormControls";
 import backgroundImage from "../../assets/background.jpg";
@@ -37,16 +37,38 @@ class AuthScreen extends Component {
   };
 
   updateInputState = (key, value) => {
-    this.setState(prevState => ({
-      controls: {
-        ...prevState.controls,
-        [key]: {
-          ...prevState.controls[key],
-          valid: validateFormValue(value, key, prevState.controls),
-          value
+    this.setState(
+      prevState => ({
+        controls: {
+          ...prevState.controls,
+          [key]: {
+            ...prevState.controls[key],
+            valid: validateFormValue(value, key, prevState.controls),
+            value
+          }
+        }
+      }),
+      () => {
+        if (
+          key === "password" &&
+          !this.state.controls["confirmPassword"].valid
+        ) {
+          this.setState(prevState => ({
+            controls: {
+              ...prevState.controls,
+              confirmPassword: {
+                ...prevState.controls.confirmPassword,
+                valid: validateFormValue(
+                  prevState.controls["confirmPassword"].value,
+                  "confirmPassword",
+                  prevState.controls
+                )
+              }
+            }
+          }));
         }
       }
-    }));
+    );
   };
 
   render() {
@@ -99,6 +121,9 @@ class AuthScreen extends Component {
                     this.updateInputState("password", value)
                   }
                 />
+                <Text style={{ color: "green" }}>
+                  {password.valid ? "password VALID" : "password INVALID"}
+                </Text>
               </View>
               <View
                 style={
@@ -115,6 +140,11 @@ class AuthScreen extends Component {
                     this.updateInputState("confirmPassword", value)
                   }
                 />
+                <Text style={{ color: "green" }}>
+                  {confirmPassword.valid
+                    ? "confirmPassword VALID"
+                    : "confirmPassword INVALID"}
+                </Text>
               </View>
             </View>
             <DefaultInput
@@ -123,6 +153,9 @@ class AuthScreen extends Component {
               value={email.value}
               onChangeText={value => this.updateInputState("email", value)}
             />
+            <Text style={{ color: "green" }}>
+              {email.valid ? "Email VALID" : "Email INVALID"}
+            </Text>
           </View>
 
           <ButtonWithBackground
