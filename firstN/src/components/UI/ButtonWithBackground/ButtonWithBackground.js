@@ -11,10 +11,12 @@ import {
 
 const ButtonWithBackground = props => {
   const content = (
-    <View style={[styles.button, props.style]}>
-      <Text style={{color: props.style ? props.style.color : 'black'}}>{props.children}</Text>
+    <View style={[styles.button, props.style, props.disabled ? styles.disabled : null]}>
+      <Text style={{color: props.style ? props.style.color : 'white'}}>{props.children}</Text>
     </View>
   );
+
+  if (props.disabled) { return content; }
 
   if (Platform.OS === 'android') {
     return ( // * TouchableNativeFeedback added ripple effect only for android
@@ -35,7 +37,11 @@ const styles = StyleSheet.create({
   button: {
     padding: 10,
     margin: 5,
-    borderRadius: 5
+    borderRadius: 5,
+    backgroundColor: "#424242"
+  },
+  disabled: {
+    backgroundColor: "#767676"
   }
 });
 

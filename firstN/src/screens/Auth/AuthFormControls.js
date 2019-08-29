@@ -2,6 +2,7 @@ export const authFormControls = {
   email: {
     value: "",
     valid: false,
+    pristine: true,
     validationRules: {
       isEmail: true
     }
@@ -9,6 +10,7 @@ export const authFormControls = {
   password: {
     value: "",
     valid: false,
+    pristine: true,
     validationRules: {
       minLength: 6
     }
@@ -16,6 +18,7 @@ export const authFormControls = {
   confirmPassword: {
     value: "",
     valid: false,
+    pristine: true,
     validationRules: {
       equalTo: "password"
     }

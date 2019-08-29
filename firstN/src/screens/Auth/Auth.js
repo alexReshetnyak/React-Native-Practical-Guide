@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { View, ImageBackground, Dimensions, Text } from "react-native";
+import { View, ImageBackground, Dimensions } from "react-native";
+import { connect } from 'react-redux';
 
+import backgroundImage from "../../assets/background.jpg";
 import { authStyles } from "./AuthStyles";
 import { goHome } from "../../navigation/navigation";
 import { DefaultInput } from "../../components/UI/DefaultInput/DefaultInput";
@@ -9,12 +11,13 @@ import { MainText } from "../../components/UI/MainText/MainText";
 import { ButtonWithBackground } from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
 import { validateFormValue } from "../../utility/validation";
 import { authFormControls } from "./AuthFormControls";
-import backgroundImage from "../../assets/background.jpg";
+import { tryAuth } from "../../store/actions";
 
 class AuthScreen extends Component {
   state = {
     viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape",
-    controls: authFormControls
+    controls: authFormControls,
+    authMode: 'login'
   };
 
   constructor(props) {
@@ -26,6 +29,12 @@ class AuthScreen extends Component {
     Dimensions.removeEventListener("change", this.updateStyles);
   }
 
+  switchAuthMode = () => {
+    this.setState(prevState => ({
+      authMode: prevState.authMode === 'login' ? 'signup' : 'login'
+    }));
+  }
+
   updateStyles = dims => {
     this.setState({
       viewMode: dims.window.height > 500 ? "portrait" : "landscape"
@@ -33,6 +42,9 @@ class AuthScreen extends Component {
   };
 
   loginHandler = () => {
+    const { controls } = this.state;
+    const authData = Object.keys(controls).map(key =>({[key]: controls[key].value}));
+    this.props.onLogin(authData);
     goHome();
   };
 
@@ -44,6 +56,7 @@ class AuthScreen extends Component {
           [key]: {
             ...prevState.controls[key],
             valid: validateFormValue(value, key, prevState.controls),
+            pristine: false,
             value
           }
         }
@@ -71,6 +84,12 @@ class AuthScreen extends Component {
     );
   };
 
+  checkFormValidity = () => {
+    const { controls } = this.state;
+    isValid = Object.keys(controls).every(key => controls[key].valid);
+    return isValid;
+  }
+
   render() {
     const { viewMode, controls } = this.state;
     const { email, password, confirmPassword } = controls;
@@ -91,11 +110,8 @@ class AuthScreen extends Component {
         <View style={authStyles.container}>
           {headingText}
 
-          <ButtonWithBackground
-            onPress={() => alert("Hello")}
-            style={{ backgroundColor: "#424242", color: "white" }}
-          >
-            Switch to Login
+          <ButtonWithBackground onPress={this.switchAuthMode}>
+            {this.state.authMode === 'login' ? 'Switch to Sign Up': 'Switch to Login'} 
           </ButtonWithBackground>
 
           <View style={authStyles.inputContainer}>
@@ -117,13 +133,11 @@ class AuthScreen extends Component {
                   style={authStyles.input}
                   placeholder="Password"
                   value={password.value}
+                  valid={password.valid || password.pristine}
                   onChangeText={value =>
                     this.updateInputState("password", value)
                   }
                 />
-                <Text style={{ color: "green" }}>
-                  {password.valid ? "password VALID" : "password INVALID"}
-                </Text>
               </View>
               <View
                 style={
@@ -136,31 +150,25 @@ class AuthScreen extends Component {
                   style={authStyles.input}
                   placeholder="Confirm Password"
                   value={confirmPassword.value}
+                  valid={confirmPassword.valid || confirmPassword.pristine}
                   onChangeText={value =>
                     this.updateInputState("confirmPassword", value)
                   }
                 />
-                <Text style={{ color: "green" }}>
-                  {confirmPassword.valid
-                    ? "confirmPassword VALID"
-                    : "confirmPassword INVALID"}
-                </Text>
               </View>
             </View>
             <DefaultInput
               style={[authStyles.input, { backgroundColor: "white" }]}
               placeholder="Your E-Mail Address"
               value={email.value}
+              valid={email.valid || email.pristine}
               onChangeText={value => this.updateInputState("email", value)}
             />
-            <Text style={{ color: "green" }}>
-              {email.valid ? "Email VALID" : "Email INVALID"}
-            </Text>
           </View>
 
           <ButtonWithBackground
+            disabled={!this.checkFormValidity()}
             onPress={this.loginHandler}
-            style={{ backgroundColor: "#424242", color: "white" }}
           >
             Submit
           </ButtonWithBackground>
@@ -169,5 +177,11 @@ class AuthScreen extends Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  onLogin: authData => dispatch(tryAuth(authData))
+});
+
+AuthScreen = connect(null, mapDispatchToProps)(AuthScreen);
 
 export { AuthScreen };
