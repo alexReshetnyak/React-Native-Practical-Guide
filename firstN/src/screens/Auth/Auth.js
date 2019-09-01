@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, ImageBackground, Dimensions } from "react-native";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import backgroundImage from "../../assets/background.jpg";
 import { authStyles } from "./AuthStyles";
@@ -17,7 +17,7 @@ class AuthScreen extends Component {
   state = {
     viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape",
     controls: authFormControls,
-    authMode: 'login'
+    authMode: "login"
   };
 
   constructor(props) {
@@ -31,9 +31,9 @@ class AuthScreen extends Component {
 
   switchAuthMode = () => {
     this.setState(prevState => ({
-      authMode: prevState.authMode === 'login' ? 'signup' : 'login'
+      authMode: prevState.authMode === "login" ? "signup" : "login"
     }));
-  }
+  };
 
   updateStyles = dims => {
     this.setState({
@@ -43,7 +43,9 @@ class AuthScreen extends Component {
 
   loginHandler = () => {
     const { controls } = this.state;
-    const authData = Object.keys(controls).map(key =>({[key]: controls[key].value}));
+    const authData = Object.keys(controls).map(key => ({
+      [key]: controls[key].value
+    }));
     this.props.onLogin(authData);
     goHome();
   };
@@ -85,20 +87,50 @@ class AuthScreen extends Component {
   };
 
   checkFormValidity = () => {
-    const { controls } = this.state;
-    isValid = Object.keys(controls).every(key => controls[key].valid);
+    const { controls, authMode } = this.state;
+    isValid = Object.keys(controls).every(key => {
+      return authMode === "login" && key === "confirmPassword"
+        ? true
+        : controls[key].valid;
+    });
     return isValid;
-  }
+  };
 
   render() {
-    const { viewMode, controls } = this.state;
+    const { viewMode, controls, authMode } = this.state;
     const { email, password, confirmPassword } = controls;
     let headingText = null;
+    let confirmPasswordControl = null;
+
     if (viewMode === "portrait") {
       headingText = (
         <MainText>
-          <HeadingText style={{ color: "white" }}>Please Log In</HeadingText>
+          <HeadingText style={{ color: "white" }}>
+            Please {authMode === "login" ? " Sign Up" : " Login"}
+          </HeadingText>
         </MainText>
+      );
+    }
+
+    if (authMode === "signup") {
+      confirmPasswordControl = (
+        <View
+          style={
+            viewMode === "portrait"
+              ? authStyles.portraitPasswordWrapper
+              : authStyles.landscapePasswordWrapper
+          }
+        >
+          <DefaultInput
+            style={authStyles.input}
+            placeholder="Confirm Password"
+            value={confirmPassword.value}
+            valid={confirmPassword.valid || confirmPassword.pristine}
+            onChangeText={value =>
+              this.updateInputState("confirmPassword", value)
+            }
+          />
+        </View>
       );
     }
 
@@ -111,22 +143,22 @@ class AuthScreen extends Component {
           {headingText}
 
           <ButtonWithBackground onPress={this.switchAuthMode}>
-            {this.state.authMode === 'login' ? 'Switch to Sign Up': 'Switch to Login'} 
+            Switch to {authMode === "login" ? " Sign Up" : " Login"}
           </ButtonWithBackground>
 
           <View style={authStyles.inputContainer}>
             <View
               style={
-                viewMode === "portrait"
-                  ? authStyles.portraitPasswordContainer
-                  : authStyles.landscapePasswordContainer
+                viewMode === "landscape" && authMode === "signup"
+                  ? authStyles.landscapePasswordContainer
+                  : authStyles.portraitPasswordContainer
               }
             >
               <View
                 style={
-                  viewMode === "portrait"
-                    ? authStyles.portraitPasswordWrapper
-                    : authStyles.landscapePasswordWrapper
+                  viewMode === "landscape" && authMode === "signup"
+                    ? authStyles.landscapePasswordWrapper
+                    : authStyles.portraitPasswordWrapper
                 }
               >
                 <DefaultInput
@@ -139,23 +171,7 @@ class AuthScreen extends Component {
                   }
                 />
               </View>
-              <View
-                style={
-                  viewMode === "portrait"
-                    ? authStyles.portraitPasswordWrapper
-                    : authStyles.landscapePasswordWrapper
-                }
-              >
-                <DefaultInput
-                  style={authStyles.input}
-                  placeholder="Confirm Password"
-                  value={confirmPassword.value}
-                  valid={confirmPassword.valid || confirmPassword.pristine}
-                  onChangeText={value =>
-                    this.updateInputState("confirmPassword", value)
-                  }
-                />
-              </View>
+              {confirmPasswordControl}
             </View>
             <DefaultInput
               style={[authStyles.input, { backgroundColor: "white" }]}
@@ -182,6 +198,9 @@ const mapDispatchToProps = dispatch => ({
   onLogin: authData => dispatch(tryAuth(authData))
 });
 
-AuthScreen = connect(null, mapDispatchToProps)(AuthScreen);
+AuthScreen = connect(
+  null,
+  mapDispatchToProps
+)(AuthScreen);
 
 export { AuthScreen };
