@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, ImageBackground, Dimensions } from "react-native";
+import { 
+  View, 
+  ImageBackground, 
+  Dimensions, 
+  KeyboardAvoidingView, 
+  Keyboard,
+  TouchableWithoutFeedback
+} from "react-native";
 import { connect } from "react-redux";
 
 import backgroundImage from "../../assets/background.jpg";
@@ -126,6 +133,7 @@ class AuthScreen extends Component {
             placeholder="Confirm Password"
             value={confirmPassword.value}
             valid={confirmPassword.valid || confirmPassword.pristine}
+            secureTextEntry
             onChangeText={value =>
               this.updateInputState("confirmPassword", value)
             }
@@ -139,48 +147,54 @@ class AuthScreen extends Component {
         source={backgroundImage}
         style={authStyles.backgroundImage}
       >
-        <View style={authStyles.container}>
+        <KeyboardAvoidingView style={authStyles.container} behavior='height'>
           {headingText}
 
           <ButtonWithBackground onPress={this.switchAuthMode}>
             Switch to {authMode === "login" ? " Sign Up" : " Login"}
           </ButtonWithBackground>
 
-          <View style={authStyles.inputContainer}>
-            <View
-              style={
-                viewMode === "landscape" && authMode === "signup"
-                  ? authStyles.landscapePasswordContainer
-                  : authStyles.portraitPasswordContainer
-              }
-            >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={authStyles.inputContainer}>
               <View
                 style={
                   viewMode === "landscape" && authMode === "signup"
-                    ? authStyles.landscapePasswordWrapper
-                    : authStyles.portraitPasswordWrapper
+                    ? authStyles.landscapePasswordContainer
+                    : authStyles.portraitPasswordContainer
                 }
               >
-                <DefaultInput
-                  style={authStyles.input}
-                  placeholder="Password"
-                  value={password.value}
-                  valid={password.valid || password.pristine}
-                  onChangeText={value =>
-                    this.updateInputState("password", value)
+                <View
+                  style={
+                    viewMode === "landscape" && authMode === "signup"
+                      ? authStyles.landscapePasswordWrapper
+                      : authStyles.portraitPasswordWrapper
                   }
-                />
+                >
+                  <DefaultInput
+                    style={authStyles.input}
+                    placeholder="Password"
+                    value={password.value}
+                    valid={password.valid || password.pristine}
+                    secureTextEntry
+                    onChangeText={value =>
+                      this.updateInputState("password", value)
+                    }
+                  />
+                </View>
+                {confirmPasswordControl}
               </View>
-              {confirmPasswordControl}
+              <DefaultInput
+                style={[authStyles.input, { backgroundColor: "white" }]}
+                placeholder="Your E-Mail Address"
+                value={email.value}
+                valid={email.valid || email.pristine}
+                autoCapitalize='none'
+                autoCorrect={false}
+                keyboardType='email-address'
+                onChangeText={value => this.updateInputState("email", value)}
+              />
             </View>
-            <DefaultInput
-              style={[authStyles.input, { backgroundColor: "white" }]}
-              placeholder="Your E-Mail Address"
-              value={email.value}
-              valid={email.valid || email.pristine}
-              onChangeText={value => this.updateInputState("email", value)}
-            />
-          </View>
+          </TouchableWithoutFeedback>
 
           <ButtonWithBackground
             disabled={!this.checkFormValidity()}
@@ -188,7 +202,8 @@ class AuthScreen extends Component {
           >
             Submit
           </ButtonWithBackground>
-        </View>
+  
+        </KeyboardAvoidingView>
       </ImageBackground>
     );
   }
