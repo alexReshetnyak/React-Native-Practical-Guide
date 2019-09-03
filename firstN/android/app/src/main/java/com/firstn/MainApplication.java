@@ -17,41 +17,9 @@ import com.reactnativenavigation.react.ReactGateway;
 import java.util.Arrays;
 import java.util.List;
 
-// ! public class MainApplication extends Application implements ReactApplication {
-// !
-//!   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
-//!     @Override
-//!     public boolean getUseDeveloperSupport() {
-//!       return BuildConfig.DEBUG;
-//!     }
-// !
-//!     @Override
-//!     protected List<ReactPackage> getPackages() {
-//!       return Arrays.<ReactPackage>asList(
-//!           new MainReactPackage(),
-//!           new VectorIconsPackage()
-//!       );
-//!     }
-// !
-//!     @Override
-//!     protected String getJSMainModuleName() {
-//!       return "index";
-//!     }
-//!   };
-// !
-//!   @Override
-//!   public ReactNativeHost getReactNativeHost() {
-//!     return mReactNativeHost;
-//!   }
-// !
-//!   @Override
-//!   public void onCreate() {
-//!     super.onCreate();
-//!     SoLoader.init(this, /* native exopackage */ false);
-//!   }
-//! }
+import com.airbnb.android.react.maps.MapsPackage;
 
-// *
+
 public class MainApplication extends NavigationApplication {
     
   @Override
@@ -74,7 +42,9 @@ public class MainApplication extends NavigationApplication {
       // Add additional packages you require here
       // No need to add RnnPackage and MainReactPackage
       return Arrays.<ReactPackage>asList(
-        new VectorIconsPackage()
+        new VectorIconsPackage(),
+        new MainReactPackage(),
+        new MapsPackage()
           // eg. new VectorIconsPackage()
       );
   }
@@ -84,4 +54,3 @@ public class MainApplication extends NavigationApplication {
       return getPackages();
   }
 }
-// *
