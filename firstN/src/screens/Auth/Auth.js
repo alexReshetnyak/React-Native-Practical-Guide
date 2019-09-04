@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { ImageBackground, Dimensions, KeyboardAvoidingView } from "react-native";
+import { 
+  ImageBackground, 
+  Dimensions, 
+  KeyboardAvoidingView, 
+  Keyboard
+} from "react-native";
 import { connect } from "react-redux";
 
 import backgroundImage from "../../assets/background.jpg";
@@ -47,6 +52,7 @@ class AuthScreen extends Component {
     const authData = Object.keys(controls).map(key => ({
       [key]: controls[key].value
     }));
+    Keyboard.dismiss()
     this.props.onLogin(authData);
     goHome();
   };
