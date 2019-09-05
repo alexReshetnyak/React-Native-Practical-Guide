@@ -16,8 +16,9 @@ const reducer = (state = initialState, action) => {
           // image: placeImage
           image: {
             uri: 'http://www.rialzi4x4evo.it/WebRoot/StoreIT8/Shops/150916/5971/B197/436C/F0E0/CE9B/0A0A/B010/A7B0/seat-cordoba-16.jpg'
-          }
-        })
+          },
+          location: action.location
+        }),
       };
   
     case DELETE_PLACE:

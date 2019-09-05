@@ -10,6 +10,7 @@ import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
 import { PlaceInput } from '../../components/PlaceInput/PlaceInput';
 import { PickImage } from '../../components/PickImage/PickImage';
 import { PickLocation } from '../../components/PickLocation/PickLocation';
+import { validateFormValue } from '../../utility/validation';
 
 class SharePlaceScreen extends Component {
 
@@ -19,7 +20,20 @@ class SharePlaceScreen extends Component {
   }
 
   state = {
-    placeName: ''
+    controls: {
+      placeName: {
+        value: '',
+        valid: false,
+        pristine: true,
+        validationRules: {
+          notEmpty: true
+        }
+      },
+      location: {
+        value: null,
+        valid: false
+      }
+    }
   }
 
   navigationButtonPressed({ buttonId }) { // * Navigation method
@@ -28,10 +42,16 @@ class SharePlaceScreen extends Component {
   }
   
   placeAddedHandler = async () => {
-    if (this.state.placeName.trim()) {
-      this.props.onAddPlace(this.state.placeName);
+    const { placeName: {value: placeName}, location: {value: location} } = this.state.controls;
+    if (placeName.trim()) {
+      this.props.onAddPlace(placeName, location);
       this.props.onIncreaseBadgeNumber();
-      this.setState({placeName: ''});
+      this.setState(prevState => ({
+        controls: {
+          placeName: { ...prevState.controls.placeName, value: '', valid: false, pristine: true },
+          location: { ...prevState.controls.location, value: null, valid: false }
+        }
+      }));
     }
   }
 
@@ -39,13 +59,36 @@ class SharePlaceScreen extends Component {
     this.navigationEventListener && this.navigationEventListener.remove();
   }
 
-  onChangePlaceNameHandler = (newName) => {
-    this.setState({
-      placeName: newName
-    });
+  onChangePlaceNameHandler = newName => {
+    this.setState(prevState => ({
+      controls: {
+        ...prevState.controls,
+        placeName: {
+          ...prevState.controls.placeName,
+          valid: validateFormValue(newName, 'placeName', prevState.controls),
+          pristine: false,
+          value: newName
+        }
+      }
+    }));
+  }
+
+  locationPickedHandler = location => {
+    this.setState(prevState => ({
+      controls: {
+        ...prevState.controls,
+        location: {
+          value: location,
+          valid: true
+        }
+      }
+    }));
   }
   
+  
   render() {
+    const { controls } = this.state;
+
     return (
       // <ScrollView contentContainerStyle={styles.container}>
       <ScrollView>
@@ -55,14 +98,18 @@ class SharePlaceScreen extends Component {
           </MainText>
           
           <PickImage/>
-          <PickLocation/>
+          <PickLocation onLocationPick={this.locationPickedHandler}/>
           <PlaceInput 
-            placeName={this.state.placeName} 
+            controls={controls}
             onChangeText={this.onChangePlaceNameHandler} 
           />
           
           <View style={styles.button}>
-            <Button title='Share the place!' onPress={this.placeAddedHandler}/>
+            <Button 
+              disabled={!controls.placeName.valid || !controls.location.valid} 
+              title='Share the place!' 
+              onPress={this.placeAddedHandler}
+            />
           </View>
         </View>
       </ScrollView>
@@ -88,7 +135,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddPlace: placeName => dispatch(addPlace(placeName)),
+  onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location)),
   onIncreaseBadgeNumber: () => dispatch(increaseBadgeNumber())
 });
 

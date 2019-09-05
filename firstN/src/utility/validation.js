@@ -38,6 +38,10 @@ export const validateFormValue = (value, key, controls) => {
           isValid &&
           checkEqualToValidity(value, controls[rules[ruleName]].value);
         break;
+    
+      case "notEmpty":
+        isValid = isValid && checkNotEmptyValidity(value);
+        break;
 
       default:
         isValid = true;
@@ -48,16 +52,14 @@ export const validateFormValue = (value, key, controls) => {
   return isValid;
 };
 
-const checkEmailValidity = value => {
-  return /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
+const checkEmailValidity = value => (
+  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(
     value
-  );
-};
+  )
+);
 
-const checkMinLengthValidity = (value, minLength) => {
-  return value.length >= minLength;
-};
+const checkMinLengthValidity = (value, minLength) => (value.length >= minLength);
 
-const checkEqualToValidity = (value, checkValue) => {
-  return value === checkValue;
-};
+const checkEqualToValidity = (value, checkValue) => (value === checkValue);
+
+const checkNotEmptyValidity = (value) => (value.trim().length !== 0);

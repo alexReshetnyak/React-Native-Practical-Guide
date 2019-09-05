@@ -24,6 +24,7 @@ class PickLocation extends Component {
 
   pickLocationHandler = event => {
     const coords = event.nativeEvent.coordinate;
+    
     this.map.animateToRegion({
       ...this.state.focusedLocation,
       latitude: coords.latitude,
@@ -38,6 +39,11 @@ class PickLocation extends Component {
       },
       locationChosen: true
     }));
+
+    this.props.onLocationPick({
+      latitude: coords.latitude,
+      longitude: coords.longitude
+    });
   }
 
   getLocationHandler = () => {
