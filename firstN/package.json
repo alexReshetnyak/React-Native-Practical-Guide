@@ -10,7 +10,7 @@
   "dependencies": {
     "react": "16.8.3",
     "react-native": "0.59.8",
-    "react-native-image-picker": "^1.1.0",
+    "react-native-image-picker": "^0.28.1",
     "react-native-maps": "0.25.0",
     "react-native-navigation": "^2.26.2",
     "react-native-vector-icons": "^6.6.0",

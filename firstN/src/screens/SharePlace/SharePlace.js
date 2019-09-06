@@ -32,6 +32,10 @@ class SharePlaceScreen extends Component {
       location: {
         value: null,
         valid: false
+      },
+      image: {
+        value: null,
+        valid: false
       }
     }
   }
@@ -42,14 +46,15 @@ class SharePlaceScreen extends Component {
   }
   
   placeAddedHandler = async () => {
-    const { placeName: {value: placeName}, location: {value: location} } = this.state.controls;
+    const { placeName: {value: placeName}, location: {value: location}, image: {value: image} } = this.state.controls;
     if (placeName.trim()) {
-      this.props.onAddPlace(placeName, location);
+      this.props.onAddPlace(placeName, location, image);
       this.props.onIncreaseBadgeNumber();
       this.setState(prevState => ({
         controls: {
           placeName: { ...prevState.controls.placeName, value: '', valid: false, pristine: true },
-          location: { ...prevState.controls.location, value: null, valid: false }
+          location: { ...prevState.controls.location, value: null, valid: false },
+          image: { ...prevState.controls.image, value: null, valid: false },
         }
       }));
     }
@@ -84,6 +89,18 @@ class SharePlaceScreen extends Component {
       }
     }));
   }
+
+  imagePickedHandler = image => {
+    this.setState(prevState => ({
+      controls: {
+        ...prevState.controls,
+        image: {
+          value: image,
+          valid: true
+        }
+      }
+    }));
+  }
   
   
   render() {
@@ -97,7 +114,7 @@ class SharePlaceScreen extends Component {
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
           
-          <PickImage/>
+          <PickImage onImagePicked={this.imagePickedHandler}/>
           <PickLocation onLocationPick={this.locationPickedHandler}/>
           <PlaceInput 
             controls={controls}
@@ -106,7 +123,11 @@ class SharePlaceScreen extends Component {
           
           <View style={styles.button}>
             <Button 
-              disabled={!controls.placeName.valid || !controls.location.valid} 
+              disabled={
+                !controls.placeName.valid || 
+                !controls.location.valid  || 
+                !controls.image.valid
+              } 
               title='Share the place!' 
               onPress={this.placeAddedHandler}
             />
@@ -135,7 +156,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location)),
+  onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
   onIncreaseBadgeNumber: () => dispatch(increaseBadgeNumber())
 });
 

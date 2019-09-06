@@ -44,6 +44,7 @@ class PlaceDetailScreen extends Component {
   
   render() {
     const { selectedPlace } = this.props;
+    
 
     return (
       <View 
@@ -55,7 +56,7 @@ class PlaceDetailScreen extends Component {
         <View style={styles.placeDetailContainer}>
           <View style={styles.subContainer}>
             <Image
-              source={selectedPlace ? selectedPlace.image : null}
+              source={selectedPlace.image}
               style={styles.placeImage} 
             />
           </View>
