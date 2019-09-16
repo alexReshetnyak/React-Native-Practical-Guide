@@ -16,14 +16,18 @@ const googleCloudStorage = new Storage(googleCloudConfig);
 exports.storeImage = functions.https.onRequest((request, response) => {
   cors(request, response, () => {
     const body = JSON.parse(request.body);
+
     fs.writeFileSync("/tmp/uploaded-image.jpg", body.image, "base64", err => {
       console.log(err);
       return response.status(500).json({ error: err });
     });
 
-    const bucket = googleCloudStorage.bucket(googleCloudConfig.projectId);
+    // const bucket = googleCloudStorage.bucket(googleCloudConfig.projectId + '.appspot.com');
+    const bucket = googleCloudStorage.bucket('gs://react-native-first-app-37e81.appspot.com/');
     const uuid = UUID();
 
+    console.log('Bucket not exist error check:', bucket);
+    
     bucket.upload(
       "/tmp/uploaded-image.jpg",
       {
@@ -37,6 +41,13 @@ exports.storeImage = functions.https.onRequest((request, response) => {
         }
       },
       (err, file) => {
+        console.log('Log 5');
+        console.log('File', file);
+        console.log('Bucket name', bucket.name);
+        console.log('uuid', uuid);
+
+        console.log('IMAGE:', fs.readFileSync("/tmp/uploaded-image.jpg"));
+        
         if (!err) {
           response.status(201).json({
             imageUrl:
