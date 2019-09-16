@@ -31,7 +31,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
         destination: "places" + uuid + ".jpg",
         metadata: {
           metadata: {
-            contentType: "image/jpeg",
+            contentType: "image/jpg",
             firebaseStorageDownloadTokens: uuid
           }
         }

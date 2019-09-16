@@ -114,8 +114,8 @@ class SharePlaceScreen extends Component {
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
           
-          <PickImage onImagePicked={this.imagePickedHandler}/>
-          <PickLocation onLocationPick={this.locationPickedHandler}/>
+          <PickImage control={controls.image} onImagePicked={this.imagePickedHandler}/>
+          <PickLocation control={controls.location} onLocationPick={this.locationPickedHandler}/>
           <PlaceInput 
             controls={controls}
             onChangeText={this.onChangePlaceNameHandler} 
