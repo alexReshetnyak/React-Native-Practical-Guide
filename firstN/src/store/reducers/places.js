@@ -1,5 +1,4 @@
-import { ADD_PLACE, DELETE_PLACE } from '../actions/actionTypes';
-// import placeImage from './src/assets/Screenshot_1.png'; // * will create js object with path property
+import { SET_PLACES } from '../actions/actionTypes';
 
 const initialState = {
   places: []
@@ -7,25 +6,17 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_PLACE:
+    case SET_PLACES:
       return {
         ...state,
-        places: state.places.concat({
-          key: Date.now() + '', 
-          name: action.placeName,
-          // image: placeImage
-          image: {
-            uri: action.image.uri
-          },
-          location: action.location
-        }),
+        places: action.places,
       };
   
-    case DELETE_PLACE:
-      return {
-        ...state,
-        places: state.places.filter(place => place.key !== action.placeKey)
-      };
+    // case DELETE_PLACE:
+    //   return {
+    //     ...state,
+    //     places: state.places.filter(place => place.key !== action.placeKey)
+    //   };
 
     default:
       return state;

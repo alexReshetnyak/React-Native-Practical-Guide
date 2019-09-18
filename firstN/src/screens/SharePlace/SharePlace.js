@@ -9,7 +9,7 @@ import {
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 
-import { addPlace, increaseBadgeNumber } from '../../store/actions';
+import { addPlace } from '../../store/actions';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
 import { MainText } from '../../components/UI/MainText/MainText';
 import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
@@ -55,7 +55,6 @@ class SharePlaceScreen extends Component {
     const { placeName: {value: placeName}, location: {value: location}, image: {value: image} } = this.state.controls;
     if (placeName.trim()) {
       this.props.onAddPlace(placeName, location, image);
-      this.props.onIncreaseBadgeNumber();
       this.setState(prevState => ({
         controls: {
           placeName: { ...prevState.controls.placeName, value: '', valid: false, pristine: true },
@@ -174,7 +173,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
-  onIncreaseBadgeNumber: () => dispatch(increaseBadgeNumber())
 });
 
 SharePlaceScreen = connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);

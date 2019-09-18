@@ -6,7 +6,7 @@ import { Navigation } from 'react-native-navigation';
 import { PlaceList } from '../../components/PlaceList/PlaceList';
 import { SideDrawer } from '../SideDrawer/SideDrawer';
 import { getPlaceDetailScreen } from '../../navigation/homeScreens';
-import { setComponentId } from '../../store/actions';
+import { setComponentId, getPlaces } from '../../store/actions';
 
 class FindPlaceScreen extends Component {
   state = {
@@ -21,7 +21,8 @@ class FindPlaceScreen extends Component {
   }
 
   componentDidMount() {
-    this.props.setComponentId(this.props.componentId)
+    this.props.setComponentId(this.props.componentId);
+    this.props.loadPlaces();
   }
   
   navigationButtonPressed({ buttonId }) {
@@ -89,7 +90,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setComponentId: id => dispatch(setComponentId(id))
+  setComponentId: id => dispatch(setComponentId(id)),
+  loadPlaces: () => dispatch(getPlaces())
 });
 
 const styles = StyleSheet.create({
