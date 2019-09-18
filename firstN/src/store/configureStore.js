@@ -4,10 +4,12 @@ import thunk from 'redux-thunk';
 
 import placesReducer from './reducers/places';
 import badgeReducer from './reducers/badge';
+import uiReducer from './reducers/ui';
 
 const rootReducer = combineReducers({
   places: placesReducer,
-  badge:  badgeReducer
+  badge:  badgeReducer,
+  ui:     uiReducer
 });
 
 let composeEnhancers = compose;

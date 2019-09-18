@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, Button, StyleSheet, ScrollView } from 'react-native';
+import { 
+  View, 
+  Button, 
+  StyleSheet, 
+  ScrollView, 
+  ActivityIndicator 
+} from 'react-native';
 import { Navigation } from 'react-native-navigation';
 import { connect } from 'react-redux';
 
@@ -105,6 +111,21 @@ class SharePlaceScreen extends Component {
   
   render() {
     const { controls } = this.state;
+    const submitButton = this.props.isLoading ? 
+      (
+        <ActivityIndicator />
+      ) :
+      (
+        <Button
+          disabled={
+            !controls.placeName.valid || 
+            !controls.location.valid  || 
+            !controls.image.valid
+          } 
+          title='Share the place!' 
+          onPress={this.placeAddedHandler}
+        />
+      );
 
     return (
       // <ScrollView contentContainerStyle={styles.container}>
@@ -122,15 +143,7 @@ class SharePlaceScreen extends Component {
           />
           
           <View style={styles.button}>
-            <Button 
-              disabled={
-                !controls.placeName.valid || 
-                !controls.location.valid  || 
-                !controls.image.valid
-              } 
-              title='Share the place!' 
-              onPress={this.placeAddedHandler}
-            />
+            {submitButton}
           </View>
         </View>
       </ScrollView>
@@ -155,11 +168,15 @@ const styles = StyleSheet.create({
   }
 });
 
+const mapStateToProps = state => ({
+  isLoading: state.ui.isLoading
+});
+
 const mapDispatchToProps = dispatch => ({
   onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
   onIncreaseBadgeNumber: () => dispatch(increaseBadgeNumber())
 });
 
-SharePlaceScreen = connect(null, mapDispatchToProps)(SharePlaceScreen);
+SharePlaceScreen = connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);
 
 export { SharePlaceScreen };

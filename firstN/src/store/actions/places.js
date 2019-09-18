@@ -1,7 +1,9 @@
 import { ADD_PLACE, DELETE_PLACE } from "./actionTypes";
+import { uiStartLoading, uiStopLoading } from './index';
 
 export const addPlace = (placeName, location, image) => async dispatch => {
   // * with redux thunk
+  dispatch(uiStartLoading());
 
   const placeData = {
     name: placeName,
@@ -17,7 +19,7 @@ export const addPlace = (placeName, location, image) => async dispatch => {
           image: image.base64
         })
       }
-    ).catch(err => console.log("ERR", err));
+    );
 
     const img = await imageJson.json();
     placeData.image = img.imageUrl;
@@ -31,8 +33,10 @@ export const addPlace = (placeName, location, image) => async dispatch => {
     );
 
     const res = await json.json();
+    dispatch(uiStopLoading());
     console.log("RESPONSE:", res);
   } catch (error) {
+    dispatch(uiStopLoading());
     console.log(error);
   }
 };
