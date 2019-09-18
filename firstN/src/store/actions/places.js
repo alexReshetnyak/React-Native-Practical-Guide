@@ -1,5 +1,5 @@
 import { DELETE_PLACE, SET_PLACES } from "./actionTypes";
-import { uiStartLoading, uiStopLoading, increaseBadgeNumber } from './index';
+import { uiStartLoading, uiStopLoading, setBadgeNumber } from './index';
 
 export const addPlace = (placeName, location, image) => async dispatch => {
   // * with redux thunk
@@ -24,7 +24,7 @@ export const addPlace = (placeName, location, image) => async dispatch => {
     const img = await imageJson.json();
     placeData.image = img.imageUrl;
 
-    const json = await fetch(
+    await fetch(
       "https://react-native-first-app-37e81.firebaseio.com/places.json",
       {
         method: "POST",
@@ -32,10 +32,8 @@ export const addPlace = (placeName, location, image) => async dispatch => {
       }
     );
 
-    const res = await json.json();
     dispatch(uiStopLoading());
-    dispatch(increaseBadgeNumber());
-    console.log("RESPONSE:", res);
+    dispatch(getPlaces());
   } catch (error) {
     console.log(error);
     dispatch(uiStopLoading());
@@ -54,12 +52,13 @@ export const getPlaces = () => async dispatch => {
 
     const places = Object.keys(res).map(key => ({
       ...res[key],
-      id: key,
+      key,
       image: {
         uri: res[key].image
       }
     }));
 
+    dispatch(setBadgeNumber(places.length));
     return dispatch(setPlaces(places));
   } catch (error) {
     console.log(error);
@@ -72,7 +71,18 @@ export const setPlaces = places => ({
   places
 });
 
-export const deletePlace = key => ({
-  type: DELETE_PLACE,
-  placeKey: key
-});
+export const deletePlace = key => async dispatch => {
+  try {
+    await fetch(
+      `https://react-native-first-app-37e81.firebaseio.com/places/${key}.json`,
+      {
+        method: "DELETE"
+      }
+    );
+    
+    return dispatch(getPlaces());
+  } catch (error) {
+    console.log(error);
+    alert('Something went wrong, sorry :/');
+  }
+};

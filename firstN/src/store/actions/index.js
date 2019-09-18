@@ -1,13 +1,15 @@
 export { 
   setPlaces,
   addPlace,
-  getPlaces
+  getPlaces,
+  deletePlace
 } from './places';
 
 export {
   increaseBadgeNumber,
   decreaseBadgeNumber,
-  setComponentId
+  setComponentId,
+  setBadgeNumber
 } from './badge';
 
 export {
