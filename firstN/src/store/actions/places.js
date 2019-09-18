@@ -3,7 +3,10 @@ import { ADD_PLACE, DELETE_PLACE } from "./actionTypes";
 export const addPlace = (placeName, location, image) => async dispatch => {
   // * with redux thunk
 
-  console.log("IMAGE:", image);
+  const placeData = {
+    name: placeName,
+    location
+  };
 
   try {
     const imageJson = await fetch(
@@ -16,28 +19,19 @@ export const addPlace = (placeName, location, image) => async dispatch => {
       }
     ).catch(err => console.log("ERR", err));
 
-    console.log("IMAGE_JSON:", imageJson);
-
     const img = await imageJson.json();
+    placeData.image = img.imageUrl;
 
-    console.log("Image URL:", img);
+    const json = await fetch(
+      "https://react-native-first-app-37e81.firebaseio.com/places.json",
+      {
+        method: "POST",
+        body: JSON.stringify(placeData)
+      }
+    );
 
-    const placeData = {
-      name: placeName,
-      location,
-      image: img.imageUrl
-    };
-
-    // const json = await fetch(
-    //   "https://react-native-first-app-37e81.firebaseio.com/places.json",
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify(placeData)
-    //   }
-    // );
-
-    // const res = await json.json();
-    // console.log("RESPONSE:", res);
+    const res = await json.json();
+    console.log("RESPONSE:", res);
   } catch (error) {
     console.log(error);
   }
