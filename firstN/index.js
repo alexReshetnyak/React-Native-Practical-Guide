@@ -16,4 +16,14 @@
 // * 3) Change user permissions to get current location in android -> src -> main -> AndroidManifest
 // * 3) Android Studio -> search AVD manager -> create new device with different version of android (optional)
 
+// * git-secret to safe api keys
+// * 1) brew install git-secret
+// * 2) gpg --full-generate-key
+// * 3) git-secret init  and add key from  user/.gnupg/openpgp-revocs.d  to  ./.gitsecret/keys
+// * 4) git-secret tell -m
+// * 5) add hideMe.js file to .gitignore
+// * 6) git secret add ./path/to/hideMe.js
+// * 7) git secret hide
+// * 8) git secret reveal to restore file
+
 import "./App";
