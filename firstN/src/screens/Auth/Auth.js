@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import { 
-  ImageBackground, 
-  Dimensions, 
-  KeyboardAvoidingView, 
-  Keyboard
+import {
+  ImageBackground,
+  Dimensions,
+  KeyboardAvoidingView,
+  Keyboard,
+  ActivityIndicator
 } from "react-native";
 import { connect } from "react-redux";
 
 import backgroundImage from "../../assets/background.jpg";
 import { authStyles } from "./AuthStyles";
-import { goHome } from "../../navigation/navigation";
 import { HeadingText } from "../../components/UI/HeadingText/HeadingText";
 import { MainText } from "../../components/UI/MainText/MainText";
 import { AuthForm } from "../../components/AuthForm/AuthForm";
@@ -46,15 +46,13 @@ class AuthScreen extends Component {
     }));
   };
 
-
   loginHandler = () => {
     const { controls } = this.state;
     const authData = Object.keys(controls).map(key => ({
       [key]: controls[key].value
     }));
-    Keyboard.dismiss()
+    Keyboard.dismiss();
     this.props.onLogin(authData);
-    goHome();
   };
 
   updateInputState = (key, value) => {
@@ -105,24 +103,31 @@ class AuthScreen extends Component {
 
   render() {
     const { viewMode, controls, authMode } = this.state;
-    let headingText = null;
-
-    if (viewMode === "portrait") {
-      headingText = (
+    const headingText =
+      viewMode === "portrait" ? (
         <MainText>
           <HeadingText style={{ color: "white" }}>
             Please {authMode === "login" ? " Sign Up" : " Login"}
           </HeadingText>
         </MainText>
-      );
-    }
+      ) : null;
+    const submitButton = this.props.isLoading ? (
+      <ActivityIndicator />
+    ) : (
+      <ButtonWithBackground
+        disabled={!this.checkFormValidity()}
+        onPress={this.loginHandler}
+      >
+        Submit
+      </ButtonWithBackground>
+    );
 
     return (
       <ImageBackground
         source={backgroundImage}
         style={authStyles.backgroundImage}
       >
-        <KeyboardAvoidingView style={authStyles.container} behavior='height'>
+        <KeyboardAvoidingView style={authStyles.container} behavior="height">
           {headingText}
 
           <ButtonWithBackground onPress={this.switchAuthMode}>
@@ -136,25 +141,23 @@ class AuthScreen extends Component {
             onFormChange={this.updateInputState}
           />
 
-          <ButtonWithBackground
-            disabled={!this.checkFormValidity()}
-            onPress={this.loginHandler}
-          >
-            Submit
-          </ButtonWithBackground>
-  
+          {submitButton}
         </KeyboardAvoidingView>
       </ImageBackground>
     );
   }
 }
 
+const mapStateToProps = state => ({
+  isLoading: state.ui.isLoading
+});
+
 const mapDispatchToProps = dispatch => ({
   onLogin: authData => dispatch(tryAuth(authData))
 });
 
 AuthScreen = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(AuthScreen);
 

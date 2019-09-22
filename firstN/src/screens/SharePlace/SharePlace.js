@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
-import { 
-  View, 
-  Button, 
-  StyleSheet, 
-  ScrollView, 
-  ActivityIndicator 
-} from 'react-native';
-import { Navigation } from 'react-native-navigation';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import {
+  View,
+  Button,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator
+} from "react-native";
+import { Navigation } from "react-native-navigation";
+import { connect } from "react-redux";
 
-import { addPlace } from '../../store/actions';
-import { SideDrawer } from '../SideDrawer/SideDrawer';
-import { MainText } from '../../components/UI/MainText/MainText';
-import { HeadingText } from '../../components/UI/HeadingText/HeadingText';
-import { PlaceInput } from '../../components/PlaceInput/PlaceInput';
-import { PickImage } from '../../components/PickImage/PickImage';
-import { PickLocation } from '../../components/PickLocation/PickLocation';
-import { validateFormValue } from '../../utility/validation';
+import { addPlace } from "../../store/actions";
+import { SideDrawer } from "../SideDrawer/SideDrawer";
+import { MainText } from "../../components/UI/MainText/MainText";
+import { HeadingText } from "../../components/UI/HeadingText/HeadingText";
+import { PlaceInput } from "../../components/PlaceInput/PlaceInput";
+import { PickImage } from "../../components/PickImage/PickImage";
+import { PickLocation } from "../../components/PickLocation/PickLocation";
+import { validateFormValue } from "../../utility/validation";
 
 class SharePlaceScreen extends Component {
-
   constructor(props) {
     super(props);
     this.navigationEventListener = Navigation.events().bindComponent(this);
@@ -28,7 +27,7 @@ class SharePlaceScreen extends Component {
   state = {
     controls: {
       placeName: {
-        value: '',
+        value: "",
         valid: false,
         pristine: true,
         validationRules: {
@@ -44,26 +43,40 @@ class SharePlaceScreen extends Component {
         valid: false
       }
     }
-  }
+  };
 
-  navigationButtonPressed({ buttonId }) { // * Navigation method
+  navigationButtonPressed({ buttonId }) {
+    // * Navigation method
     buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
   }
-  
+
   placeAddedHandler = async () => {
-    const { placeName: {value: placeName}, location: {value: location}, image: {value: image} } = this.state.controls;
+    const {
+      placeName: { value: placeName },
+      location: { value: location },
+      image: { value: image }
+    } = this.state.controls;
     if (placeName.trim()) {
       this.props.onAddPlace(placeName, location, image);
       this.setState(prevState => ({
         controls: {
-          placeName: { ...prevState.controls.placeName, value: '', valid: false, pristine: true },
-          location: { ...prevState.controls.location, value: null, valid: false },
-          image: { ...prevState.controls.image, value: null, valid: false },
+          placeName: {
+            ...prevState.controls.placeName,
+            value: "",
+            valid: false,
+            pristine: true
+          },
+          location: {
+            ...prevState.controls.location,
+            value: null,
+            valid: false
+          },
+          image: { ...prevState.controls.image, value: null, valid: false }
         }
       }));
     }
-  }
+  };
 
   componentWillUnmount() {
     this.navigationEventListener && this.navigationEventListener.remove();
@@ -75,13 +88,13 @@ class SharePlaceScreen extends Component {
         ...prevState.controls,
         placeName: {
           ...prevState.controls.placeName,
-          valid: validateFormValue(newName, 'placeName', prevState.controls),
+          valid: validateFormValue(newName, "placeName", prevState.controls),
           pristine: false,
           value: newName
         }
       }
     }));
-  }
+  };
 
   locationPickedHandler = location => {
     this.setState(prevState => ({
@@ -93,7 +106,7 @@ class SharePlaceScreen extends Component {
         }
       }
     }));
-  }
+  };
 
   imagePickedHandler = image => {
     this.setState(prevState => ({
@@ -105,26 +118,23 @@ class SharePlaceScreen extends Component {
         }
       }
     }));
-  }
-  
-  
+  };
+
   render() {
     const { controls } = this.state;
-    const submitButton = this.props.isLoading ? 
-      (
-        <ActivityIndicator />
-      ) :
-      (
-        <Button
-          disabled={
-            !controls.placeName.valid || 
-            !controls.location.valid  || 
-            !controls.image.valid
-          } 
-          title='Share the place!' 
-          onPress={this.placeAddedHandler}
-        />
-      );
+    const submitButton = this.props.isLoading ? (
+      <ActivityIndicator />
+    ) : (
+      <Button
+        disabled={
+          !controls.placeName.valid ||
+          !controls.location.valid ||
+          !controls.image.valid
+        }
+        title="Share the place!"
+        onPress={this.placeAddedHandler}
+      />
+    );
 
     return (
       // <ScrollView contentContainerStyle={styles.container}>
@@ -133,17 +143,21 @@ class SharePlaceScreen extends Component {
           <MainText>
             <HeadingText>Share a place with us!</HeadingText>
           </MainText>
-          
-          <PickImage control={controls.image} onImagePicked={this.imagePickedHandler}/>
-          <PickLocation control={controls.location} onLocationPick={this.locationPickedHandler}/>
-          <PlaceInput 
-            controls={controls}
-            onChangeText={this.onChangePlaceNameHandler} 
+
+          <PickImage
+            control={controls.image}
+            onImagePicked={this.imagePickedHandler}
           />
-          
-          <View style={styles.button}>
-            {submitButton}
-          </View>
+          <PickLocation
+            control={controls.location}
+            onLocationPick={this.locationPickedHandler}
+          />
+          <PlaceInput
+            controls={controls}
+            onChangeText={this.onChangePlaceNameHandler}
+          />
+
+          <View style={styles.button}>{submitButton}</View>
         </View>
       </ScrollView>
     );
@@ -153,13 +167,13 @@ class SharePlaceScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center" 
+    alignItems: "center"
   },
   placeholder: {
     borderWidth: 1,
-    borderColor: 'black',
-    backgroundColor: '#eee',
-    width: '80%',
+    borderColor: "black",
+    backgroundColor: "#eee",
+    width: "80%",
     height: 200
   },
   button: {
@@ -172,9 +186,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
+  onAddPlace: (placeName, location, image) =>
+    dispatch(addPlace(placeName, location, image))
 });
 
-SharePlaceScreen = connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);
+SharePlaceScreen = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SharePlaceScreen);
 
 export { SharePlaceScreen };
