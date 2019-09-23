@@ -48,9 +48,10 @@ class AuthScreen extends Component {
 
   loginHandler = () => {
     const { controls } = this.state;
-    const authData = Object.keys(controls).map(key => ({
-      [key]: controls[key].value
-    }));
+    const authData = Object.keys(controls).reduce((sum, key) => {
+       sum[key] = controls[key].value;
+       return sum;
+    }, {});
     Keyboard.dismiss();
     this.props.onLogin(authData);
   };

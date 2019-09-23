@@ -10,15 +10,17 @@ export const tryAuth = authData => dispatch => {
 export const authSignup = authData => async dispatch => {
   try {
     dispatch(uiStartLoading());
+    const body = {
+      email:              authData.email,
+      password:           authData.password,
+      returnSecureToken:  true
+    };
+    
     const res = await fetch(
       `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
       {
         method: "POST",
-        body: JSON.stringify({
-          email: authData.email,
-          password: authData.password,
-          returnSecureToken: true
-        }),
+        body: JSON.stringify(body),
         headers: {
           "Content-Type": "application/json"
         }
@@ -28,13 +30,13 @@ export const authSignup = authData => async dispatch => {
     const parsedRes = await res.json();
     dispatch(uiStopLoading());
     if (parsedRes.error) {
-      throw new Error(parsedRes.error);
+      throw parsedRes.error;
     }
     console.log("AUTH RESPONSE:", parsedRes);
     goHome();
   } catch (error) {
     dispatch(uiStopLoading());
-    console.error(error);
+    console.log(error);
     alert("Authentication failed, please try again");
   }
 };
