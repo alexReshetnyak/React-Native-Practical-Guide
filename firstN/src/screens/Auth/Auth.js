@@ -46,14 +46,14 @@ class AuthScreen extends Component {
     }));
   };
 
-  loginHandler = () => {
+  authHandler = () => {
     const { controls } = this.state;
     const authData = Object.keys(controls).reduce((sum, key) => {
        sum[key] = controls[key].value;
        return sum;
     }, {});
     Keyboard.dismiss();
-    this.props.onLogin(authData);
+    this.props.onTryAuth(authData, this.state.authMode);
   };
 
   updateInputState = (key, value) => {
@@ -117,7 +117,7 @@ class AuthScreen extends Component {
     ) : (
       <ButtonWithBackground
         disabled={!this.checkFormValidity()}
-        onPress={this.loginHandler}
+        onPress={this.authHandler}
       >
         Submit
       </ButtonWithBackground>
@@ -154,7 +154,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onLogin: authData => dispatch(tryAuth(authData))
+  onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
 });
 
 AuthScreen = connect(
