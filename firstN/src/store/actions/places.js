@@ -49,6 +49,8 @@ export const getPlaces = () => async dispatch => {
     if (!res) {
       return dispatch(setPlaces([]));
     }
+  
+    if (res.error) { throw res.error };
 
     const places = Object.keys(res).map(key => ({
       ...res[key],
@@ -62,7 +64,7 @@ export const getPlaces = () => async dispatch => {
     return dispatch(setPlaces(places));
   } catch (error) {
     console.log(error);
-    alert('Something went wrong, sorry :/');
+    alert('Something went wrong, sorry :/ ' + error);
   }
 };
 

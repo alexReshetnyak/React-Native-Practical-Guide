@@ -36,6 +36,17 @@ class AuthForm extends Component {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.inputContainer}>
+          <DefaultInput
+            style={[styles.input, { backgroundColor: "white" }]}
+            placeholder="Your E-Mail Address"
+            value={email.value}
+            valid={email.valid || email.pristine}
+            autoCapitalize='none'
+            autoCorrect={false}
+            keyboardType='email-address'
+            onChangeText={value => onFormChange("email", value)}
+          />
+
           <View
             style={
               viewMode === "landscape" && authMode === "signup"
@@ -63,16 +74,6 @@ class AuthForm extends Component {
             </View>
             {confirmPasswordControl}
           </View>
-          <DefaultInput
-            style={[styles.input, { backgroundColor: "white" }]}
-            placeholder="Your E-Mail Address"
-            value={email.value}
-            valid={email.valid || email.pristine}
-            autoCapitalize='none'
-            autoCorrect={false}
-            keyboardType='email-address'
-            onChangeText={value => onFormChange("email", value)}
-          />
         </View>
       </TouchableWithoutFeedback>
     );
