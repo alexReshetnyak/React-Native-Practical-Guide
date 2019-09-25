@@ -1,6 +1,7 @@
 import { API_KEY } from "../../config";
 import { uiStartLoading, uiStopLoading } from "./index";
 import { goHome } from "../../navigation/navigation";
+import { AUTH_SET_TOKEN } from './actionTypes';
 
 export const tryAuth = (authData, authMode) => async dispatch => {
   const body = {
@@ -28,15 +29,34 @@ export const tryAuth = (authData, authMode) => async dispatch => {
       );
   
       const parsedRes = await res.json();
-      dispatch(uiStopLoading());
       if (parsedRes.error) {
         throw parsedRes.error;
+      } else if (!parsedRes.idToken) {
+        throw 'Token is missed'
       }
+
       console.log("AUTH RESPONSE:", parsedRes);
+      dispatch(authSetToken(parsedRes.idToken));
+      dispatch(uiStopLoading());
       goHome();
     } catch (error) {
       dispatch(uiStopLoading());
       console.log(error);
       alert("Authentication failed, please try again");
     }
+};
+
+
+export const authSetToken = token => ({
+  type: AUTH_SET_TOKEN,
+  token
+});
+
+
+export const authGetToken = () => (dispatch, getState) => {
+  return new Promise((resolve, reject) => {
+    const token = getState().auth.token;
+    !token  && reject('Token missed');
+    token   && resolve(token);
+  });
 };

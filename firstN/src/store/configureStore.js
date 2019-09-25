@@ -2,14 +2,16 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import placesReducer from './reducers/places';
-import badgeReducer from './reducers/badge';
-import uiReducer from './reducers/ui';
+import placesReducer  from './reducers/places';
+import badgeReducer   from './reducers/badge';
+import uiReducer      from './reducers/ui';
+import authReducer    from './reducers/auth';
 
 const rootReducer = combineReducers({
   places: placesReducer,
   badge:  badgeReducer,
-  ui:     uiReducer
+  ui:     uiReducer,
+  auth:   authReducer
 });
 
 let composeEnhancers = compose;

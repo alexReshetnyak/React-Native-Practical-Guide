@@ -17,4 +17,8 @@ export {
   uiStopLoading
 } from './ui';
 
-export { tryAuth } from './auth';
+export { 
+  tryAuth,
+  authSetToken,
+  authGetToken
+} from './auth';

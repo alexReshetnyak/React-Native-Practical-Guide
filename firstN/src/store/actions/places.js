@@ -1,18 +1,25 @@
 import { DELETE_PLACE, SET_PLACES } from "./actionTypes";
-import { uiStartLoading, uiStopLoading, setBadgeNumber } from './index';
+import { 
+  uiStartLoading, 
+  uiStopLoading, 
+  setBadgeNumber, 
+  authGetToken 
+} from './index';
 
 export const addPlace = (placeName, location, image) => async dispatch => {
   // * with redux thunk
-  dispatch(uiStartLoading());
-
   const placeData = {
     name: placeName,
     location
   };
+  const addPlaceUrl = "https://react-native-first-app-37e81.firebaseio.com/places.json";
+  const imageUrl = "https://us-central1-react-native-first-app-37e81.cloudfunctions.net/storeImage";
 
+  dispatch(uiStartLoading());
+  
   try {
     const imageJson = await fetch(
-      "https://us-central1-react-native-first-app-37e81.cloudfunctions.net/storeImage",
+      imageUrl,
       {
         method: "POST",
         body: JSON.stringify({
@@ -23,9 +30,10 @@ export const addPlace = (placeName, location, image) => async dispatch => {
 
     const img = await imageJson.json();
     placeData.image = img.imageUrl;
+    const token = await dispatch(authGetToken());
 
     await fetch(
-      "https://react-native-first-app-37e81.firebaseio.com/places.json",
+      `${addPlaceUrl}?auth=${token}`,
       {
         method: "POST",
         body: JSON.stringify(placeData)
@@ -43,7 +51,9 @@ export const addPlace = (placeName, location, image) => async dispatch => {
 
 export const getPlaces = () => async dispatch => {
   try {
-    const json = await fetch("https://react-native-first-app-37e81.firebaseio.com/places.json");
+    const token = await dispatch(authGetToken());
+    const getPlacesUrl = "https://react-native-first-app-37e81.firebaseio.com/places.json";
+    const json = await fetch(`${getPlacesUrl}?auth=${token}`);
     const res = await json.json();
     
     if (!res) {
@@ -63,7 +73,7 @@ export const getPlaces = () => async dispatch => {
     dispatch(setBadgeNumber(places.length));
     return dispatch(setPlaces(places));
   } catch (error) {
-    console.log(error);
+    console.error(error);
     alert('Something went wrong, sorry :/ ' + error);
   }
 };
@@ -75,8 +85,10 @@ export const setPlaces = places => ({
 
 export const deletePlace = key => async dispatch => {
   try {
+    const token = await dispatch(authGetToken());
+    const deletePlaceUrl = `https://react-native-first-app-37e81.firebaseio.com/places/${key}.json`;
     await fetch(
-      `https://react-native-first-app-37e81.firebaseio.com/places/${key}.json`,
+      `${deletePlaceUrl}?auth=${token}`,
       {
         method: "DELETE"
       }
