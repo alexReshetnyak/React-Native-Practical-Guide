@@ -35,7 +35,6 @@ export const tryAuth = (authData, authMode) => async dispatch => {
         throw 'Token is missed'
       }
 
-      console.log("AUTH RESPONSE:", parsedRes);
       dispatch(authSetToken(parsedRes.idToken));
       dispatch(uiStopLoading());
       goHome();

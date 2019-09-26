@@ -57,6 +57,7 @@ export const getPlaces = () => async dispatch => {
     const res = await json.json();
     
     if (!res) {
+      dispatch(setBadgeNumber(0))
       return dispatch(setPlaces([]));
     }
   
@@ -73,7 +74,7 @@ export const getPlaces = () => async dispatch => {
     dispatch(setBadgeNumber(places.length));
     return dispatch(setPlaces(places));
   } catch (error) {
-    console.error(error);
+    console.log(error);
     alert('Something went wrong, sorry :/ ' + error);
   }
 };
