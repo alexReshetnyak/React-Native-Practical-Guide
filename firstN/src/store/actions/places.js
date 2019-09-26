@@ -18,6 +18,7 @@ export const addPlace = (placeName, location, image) => async dispatch => {
   dispatch(uiStartLoading());
   
   try {
+    const token = await dispatch(authGetToken());
     const imageJson = await fetch(
       imageUrl,
       {
@@ -27,10 +28,11 @@ export const addPlace = (placeName, location, image) => async dispatch => {
         })
       }
     );
-
+    
     const img = await imageJson.json();
+    if (img.error) { throw img.error }
+
     placeData.image = img.imageUrl;
-    const token = await dispatch(authGetToken());
 
     await fetch(
       `${addPlaceUrl}?auth=${token}`,
