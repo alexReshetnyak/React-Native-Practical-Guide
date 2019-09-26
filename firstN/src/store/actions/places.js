@@ -19,10 +19,15 @@ export const addPlace = (placeName, location, image) => async dispatch => {
   
   try {
     const token = await dispatch(authGetToken());
+    console.log('START');
+    
     const imageJson = await fetch(
       imageUrl,
       {
         method: "POST",
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           image: image.base64
         })
@@ -47,7 +52,7 @@ export const addPlace = (placeName, location, image) => async dispatch => {
   } catch (error) {
     console.log(error);
     dispatch(uiStopLoading());
-    alert('Something went wrong, please try again!')
+    alert(`Something went wrong, please try again! Message: ${error}`)
   }
 };
 
