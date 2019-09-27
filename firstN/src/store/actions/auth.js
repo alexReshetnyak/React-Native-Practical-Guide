@@ -1,4 +1,6 @@
-import { API_KEY } from "../../config";
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { API_KEY , STORAGE_KEYS } from "../../config";
 import { uiStartLoading, uiStopLoading } from "./index";
 import { goHome } from "../../navigation/navigation";
 import { AUTH_SET_TOKEN } from './actionTypes';
@@ -35,7 +37,7 @@ export const tryAuth = (authData, authMode) => async dispatch => {
         throw 'Token is missed'
       }
 
-      dispatch(authSetToken(parsedRes.idToken));
+      dispatch(authStoreToken(parsedRes.idToken));
       dispatch(uiStopLoading());
       goHome();
     } catch (error) {
@@ -46,16 +48,48 @@ export const tryAuth = (authData, authMode) => async dispatch => {
 };
 
 
+export const authStoreToken = token => async dispatch => {
+  dispatch(authSetToken(token));
+  try {
+    await AsyncStorage.setItem(STORAGE_KEYS.token, token);
+  } catch (error) {
+    console.log('Error while storing token');
+  }
+};
+
+
 export const authSetToken = token => ({
   type: AUTH_SET_TOKEN,
   token
 });
 
 
-export const authGetToken = () => (dispatch, getState) => {
+export const authGetToken = () => async (dispatch, getState) => {
+  let token = getState().auth.token;
+  try {
+    if(!token) {
+      token = await AsyncStorage.getItem(STORAGE_KEYS.token);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  
   return new Promise((resolve, reject) => {
-    const token = getState().auth.token;
-    !token  && reject('Token missed');
-    token   && resolve(token);
+    if (token) {
+      dispatch(authSetToken(token));
+      resolve(token);
+    } else {
+      reject('Error while getting token')
+    }
   });
 };
+
+export const authAutoSignIn = () => async dispatch => {
+  try {
+    await dispatch(authGetToken());
+    goHome();
+  } catch (error) {
+    console.log('Failed to fetch token');
+  }
+};
+

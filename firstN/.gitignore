@@ -58,3 +58,4 @@ buck-out/
 
 # Config file
 src/config.js
+functions/firebase-adminsdk.json

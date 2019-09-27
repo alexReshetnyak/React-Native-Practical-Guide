@@ -20,5 +20,6 @@ export {
 export { 
   tryAuth,
   authSetToken,
-  authGetToken
+  authGetToken,
+  authAutoSignIn
 } from './auth';

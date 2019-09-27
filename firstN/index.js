@@ -24,6 +24,7 @@
 // * 5) add hideMe.js file to .gitignore
 // * 6) git secret add ./path/to/hideMe.js
 // * 7) git secret hide
+// * 8) git rm --cached hide.me 
 // * 8) git secret reveal to restore file
 
 import "./App";

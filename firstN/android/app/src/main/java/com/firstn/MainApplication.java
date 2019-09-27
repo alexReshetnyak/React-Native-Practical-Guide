@@ -5,6 +5,7 @@ import android.app.Application;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -45,6 +46,7 @@ public class MainApplication extends NavigationApplication {
       return Arrays.<ReactPackage>asList(
         new VectorIconsPackage(),
         new MainReactPackage(),
+            new AsyncStoragePackage(),
             new ImagePickerPackage(),
         new MapsPackage()
           // eg. new VectorIconsPackage()

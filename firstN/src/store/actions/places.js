@@ -1,4 +1,4 @@
-import { DELETE_PLACE, SET_PLACES } from "./actionTypes";
+import { SET_PLACES } from "./actionTypes";
 import { 
   uiStartLoading, 
   uiStopLoading, 
@@ -19,8 +19,6 @@ export const addPlace = (placeName, location, image) => async dispatch => {
   
   try {
     const token = await dispatch(authGetToken());
-    console.log('START');
-    
     const imageJson = await fetch(
       imageUrl,
       {

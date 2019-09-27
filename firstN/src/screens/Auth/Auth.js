@@ -16,7 +16,7 @@ import { AuthForm } from "../../components/AuthForm/AuthForm";
 import { ButtonWithBackground } from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
 import { validateFormValue } from "../../utility/validation";
 import { authFormControls } from "./AuthFormControls";
-import { tryAuth } from "../../store/actions";
+import { tryAuth, authAutoSignIn } from "../../store/actions";
 
 class AuthScreen extends Component {
   state = {
@@ -28,6 +28,10 @@ class AuthScreen extends Component {
   constructor(props) {
     super(props);
     Dimensions.addEventListener("change", this.updateStyles);
+  }
+
+  componentDidMount() {
+    this.props.onAutoSignIn();
   }
 
   componentWillUnmount() {
@@ -154,7 +158,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
+  onTryAuth:    (authData, authMode) => dispatch(tryAuth(authData, authMode)),
+  onAutoSignIn: () => {dispatch(authAutoSignIn())}
 });
 
 AuthScreen = connect(
