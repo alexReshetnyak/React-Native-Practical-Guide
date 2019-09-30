@@ -37,7 +37,9 @@ export const tryAuth = (authData, authMode) => async dispatch => {
         throw 'Token is missed'
       }
 
-      dispatch(authStoreToken(parsedRes.idToken));
+      console.log('Auth response:', parsedRes);
+      
+      dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn));
       dispatch(uiStopLoading());
       goHome();
     } catch (error) {
@@ -48,12 +50,15 @@ export const tryAuth = (authData, authMode) => async dispatch => {
 };
 
 
-export const authStoreToken = token => async dispatch => {
+export const authStoreToken = (token, expiresIn) => async dispatch => {
   dispatch(authSetToken(token));
   try {
+    const now = new Date();
+    const expiryDate = now.getTime() + expiresIn * 1000;
     await AsyncStorage.setItem(STORAGE_KEYS.token, token);
+    await AsyncStorage.setItem(STORAGE_KEYS.expiryDate, expiryDate.toString())
   } catch (error) {
-    console.log('Error while storing token');
+    console.log('Error while storing data to storage', error);
   }
 };
 
@@ -66,7 +71,10 @@ export const authSetToken = token => ({
 
 export const authGetToken = () => async (dispatch, getState) => {
   let token = getState().auth.token;
+  let expiryDate = null;
+
   try {
+    expiryDate = await AsyncStorage.getItem(STORAGE_KEYS.expiryDate);
     if(!token) {
       token = await AsyncStorage.getItem(STORAGE_KEYS.token);
     }
@@ -76,8 +84,17 @@ export const authGetToken = () => async (dispatch, getState) => {
   
   return new Promise((resolve, reject) => {
     if (token) {
-      dispatch(authSetToken(token));
-      resolve(token);
+      if (!expiryDate) { reject('Expiry date lost'); }
+
+      const parsedExpiryDate = new Date(+expiryDate);
+      const now = new Date();
+
+      if (parsedExpiryDate <= now) {
+        reject('Expiry date is over');
+      } else {
+        dispatch(authSetToken(token));
+        resolve(token);
+      }
     } else {
       reject('Error while getting token')
     }
