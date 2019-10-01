@@ -79,7 +79,7 @@ export const getPlaces = () => async dispatch => {
     dispatch(setBadgeNumber(places.length));
     return dispatch(setPlaces(places));
   } catch (error) {
-    console.log(error);
+    console.log('Get places error:', error);
     alert('Something went wrong, sorry :/ ' + error);
   }
 };
