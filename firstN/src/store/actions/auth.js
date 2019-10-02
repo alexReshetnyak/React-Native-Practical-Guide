@@ -72,7 +72,7 @@ const exchangeRefreshToken = async () => {
     });
 
     const parsedRes = await res.json();
-    console.log('Refresh token parsed response', parsedRes);
+    // console.log('Refresh token parsed response', parsedRes);
     if (parsedRes.id_token) {
       return parsedRes;
     } else {
@@ -90,8 +90,7 @@ export const tryAuth = (authData, authMode) => async dispatch => {
 
   try {
     const parsedRes = await sendAuthRequest(authData, authMode);
-    console.log('Auth response:', parsedRes);
-    
+    // console.log('Auth response:', parsedRes);
     dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn, parsedRes.refreshToken));
     dispatch(uiStopLoading());
     goHome();
@@ -104,12 +103,12 @@ export const tryAuth = (authData, authMode) => async dispatch => {
 
 
 export const authStoreToken = (token, expiresIn, refreshToken) => async dispatch => {
-  dispatch(authSetToken(token));
-  try {
-    const now = new Date();
-    // const expiryDate = now.getTime() + 5 * 1000;
-    const expiryDate = now.getTime() + expiresIn * 1000;
+  const now = new Date();
+  // const expiryDate = now.getTime() + 5 * 1000;
+  const expiryDate = now.getTime() + expiresIn * 1000;
 
+  dispatch(authSetToken(token, expiryDate));
+  try {
     await AsyncStorage.setItem(STORAGE_KEYS.token, token);
     await AsyncStorage.setItem(STORAGE_KEYS.expiryDate, expiryDate.toString());
     await AsyncStorage.setItem(STORAGE_KEYS.refreshToken, refreshToken);
@@ -119,32 +118,31 @@ export const authStoreToken = (token, expiresIn, refreshToken) => async dispatch
 };
 
 
-export const authSetToken = token => ({
+export const authSetToken = (token, expiryDate) => ({
   type: AUTH_SET_TOKEN,
-  token
+  token,
+  expiryDate
 });
 
 
 export const authGetToken = () => async (dispatch, getState) => {
   let token      = getState().auth.token;
-  let expiryDate = null;
-
-  console.log('authGetToken, token from state:', token);
-  
+  let expiryDate = getState().auth.expiryDate;
+  // console.log('authGetToken, token from state:', token);
   try {
-    expiryDate = await AsyncStorage.getItem(STORAGE_KEYS.expiryDate);
-    console.log('authGetToken, expiryDate from storage:', expiryDate);
-
     if(!token) {
       token = await AsyncStorage.getItem(STORAGE_KEYS.token);
-      console.log('authGetToken, token from storage:', token);
+    }
+    if (!expiryDate) {
+      expiryDate = await AsyncStorage.getItem(STORAGE_KEYS.expiryDate);
     }
   } catch (error) {
     console.log('Error while getting data from storage', error);
   }
 
   const promise = new Promise((resolve, reject) => {
-    if (!expiryDate) { return reject('Expiry date not set') }
+    if (!expiryDate) { return reject('Expiry date not set'); }
+    if (!token) { return reject('Token not set'); }
 
     const { error } = validateToken(token, expiryDate);
     if (!error) {
@@ -200,8 +198,6 @@ export const authClearStorage = () => async dispatch => {
 
 
 export const authLogout = () => async dispatch => {
-  console.log('AuthLogout start');
-  
   await dispatch(authClearStorage());
   goToAuth();
   dispatch(authRemoveToken());
