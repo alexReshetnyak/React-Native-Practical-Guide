@@ -21,5 +21,6 @@ export {
   tryAuth,
   authSetToken,
   authGetToken,
-  authAutoSignIn
+  authAutoSignIn,
+  authLogout
 } from './auth';

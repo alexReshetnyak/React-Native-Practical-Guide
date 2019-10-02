@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 import { API_KEY , STORAGE_KEYS } from "../../config";
-import { uiStartLoading, uiStopLoading } from "./index";
-import { goHome } from "../../navigation/navigation";
-import { AUTH_SET_TOKEN } from './actionTypes';
+import { uiStartLoading, uiStopLoading } from "./ui";
+import { goHome , goToAuth } from "../../navigation/navigation";
+import { AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
 
 const sendAuthRequest = async (authData, authMode) => {
   const body = {
@@ -61,6 +61,8 @@ const validateToken = (token, expiryDate) => {
 const exchangeRefreshToken = async () => {
   try {
     const refreshToken = await AsyncStorage.getItem(STORAGE_KEYS.refreshToken);
+    if (!refreshToken) { throw 'exchangeRefreshToken: Refresh token not stored'; }
+
     const res = await fetch(`https://securetoken.googleapis.com/v1/token?key=${API_KEY}`, {
       method: 'POST',
       headers: {
@@ -105,8 +107,8 @@ export const authStoreToken = (token, expiresIn, refreshToken) => async dispatch
   dispatch(authSetToken(token));
   try {
     const now = new Date();
-    //! const expiryDate = now.getTime() + expiresIn * 1000;
-    const expiryDate = now.getTime() + 5 * 1000;
+    // const expiryDate = now.getTime() + 5 * 1000;
+    const expiryDate = now.getTime() + expiresIn * 1000;
 
     await AsyncStorage.setItem(STORAGE_KEYS.token, token);
     await AsyncStorage.setItem(STORAGE_KEYS.expiryDate, expiryDate.toString());
@@ -127,16 +129,23 @@ export const authGetToken = () => async (dispatch, getState) => {
   let token      = getState().auth.token;
   let expiryDate = null;
 
+  console.log('authGetToken, token from state:', token);
+  
   try {
     expiryDate = await AsyncStorage.getItem(STORAGE_KEYS.expiryDate);
+    console.log('authGetToken, expiryDate from storage:', expiryDate);
+
     if(!token) {
       token = await AsyncStorage.getItem(STORAGE_KEYS.token);
+      console.log('authGetToken, token from storage:', token);
     }
   } catch (error) {
     console.log('Error while getting data from storage', error);
   }
 
   const promise = new Promise((resolve, reject) => {
+    if (!expiryDate) { return reject('Expiry date not set') }
+
     const { error } = validateToken(token, expiryDate);
     if (!error) {
       dispatch(authSetToken(token));
@@ -150,11 +159,12 @@ export const authGetToken = () => async (dispatch, getState) => {
   return promise
     .catch(async err => {
       try {
+        console.log('authGetToken, promise catch error:', err);
         const { id_token, expires_in, refresh_token } = await exchangeRefreshToken();
         dispatch(authStoreToken(id_token, expires_in, refresh_token));
         return id_token;
       } catch (error) {
-        console.log(error)      
+        console.log('Promise catch error', error); 
         dispatch(authClearStorage());
         throw error;
       }
@@ -169,19 +179,35 @@ export const authGetToken = () => async (dispatch, getState) => {
 
 export const authAutoSignIn = () => async dispatch => {
   try {
-    await dispatch(authGetToken());
+    const token = await dispatch(authGetToken());
+    console.log('Auth auto sign in, Token', token);
     goHome();
   } catch (error) {
     console.log('Failed to fetch token', error);
   }
 };
 
-export const authClearStorage = async () => {
+
+export const authClearStorage = () => async dispatch => {
   try {
     await AsyncStorage.removeItem(STORAGE_KEYS.token);
     await AsyncStorage.removeItem(STORAGE_KEYS.expiryDate);
+    await AsyncStorage.removeItem(STORAGE_KEYS.refreshToken);
   } catch (error) {
     console.log(error);
   }
 };
 
+
+export const authLogout = () => async dispatch => {
+  console.log('AuthLogout start');
+  
+  await dispatch(authClearStorage());
+  goToAuth();
+  dispatch(authRemoveToken());
+};
+
+
+export const authRemoveToken = () => ({
+  type: AUTH_REMOVE_TOKEN
+});

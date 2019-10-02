@@ -1,10 +1,7 @@
 import { SET_PLACES } from "./actionTypes";
-import { 
-  uiStartLoading, 
-  uiStopLoading, 
-  setBadgeNumber, 
-  authGetToken 
-} from './index';
+import { setBadgeNumber } from './badge';
+import { authGetToken } from './auth';
+import { uiStartLoading, uiStopLoading } from './ui';
 
 export const addPlace = (placeName, location, image) => async dispatch => {
   // * with redux thunk
