@@ -1,9 +1,11 @@
+import { Navigation } from 'react-native-navigation';
+
 import { SET_PLACES } from "./actionTypes";
 import { setBadgeNumber } from './badge';
 import { authGetToken } from './auth';
 import { uiStartLoading, uiStopLoading } from './ui';
 
-export const addPlace = (placeName, location, image) => async dispatch => {
+export const addPlace = (placeName, location, image) => async (dispatch, getState) => {
   // * with redux thunk
   const placeData = {
     name: placeName,
@@ -15,7 +17,10 @@ export const addPlace = (placeName, location, image) => async dispatch => {
   dispatch(uiStartLoading());
   
   try {
+    console.log('Start addPlace');
     const token = await dispatch(authGetToken());
+    console.log('addPlace token', token);
+
     const imageJson = await fetch(
       imageUrl,
       {
@@ -28,13 +33,16 @@ export const addPlace = (placeName, location, image) => async dispatch => {
         })
       }
     );
-    
+
+    console.log('addPlace imageJson', imageJson);
     const img = await imageJson.json();
+    console.log('addPlace img', img);
+
     if (img.error) { throw img.error }
 
     placeData.image = img.imageUrl;
-
-    await fetch(
+    console.log('addPlace start upload place');
+    const addPlaceRes = await fetch(
       `${addPlaceUrl}?auth=${token}`,
       {
         method: "POST",
@@ -42,8 +50,24 @@ export const addPlace = (placeName, location, image) => async dispatch => {
       }
     );
 
+    console.log('addPlace response', addPlaceRes);
     dispatch(uiStopLoading());
     dispatch(getPlaces());
+    
+    const findScreenComponentId = getState().badge.componentId;
+    console.log('Find screen component ID:', findScreenComponentId);
+
+    Navigation.mergeOptions(findScreenComponentId, {
+      bottomTabs: {
+        currentTabId: findScreenComponentId
+      }
+    });
+
+    // Navigation.mergeOptions('HomeId', {
+    //   bottomTabs: {
+    //     currentTabIndex: 1
+    //   }
+    // });
   } catch (error) {
     console.log(error);
     dispatch(uiStopLoading());
