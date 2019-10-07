@@ -25,6 +25,10 @@
 // * 6) git secret add ./path/to/hideMe.js
 // * 7) git secret hide
 // * 8) git rm --cached hide.me 
-// * 8) git secret reveal to restore file
+// * 9) git secret reveal to restore file
+// * 10) second pc: gpg --armor --export mail@gmail.com > homeKey.asc
+// * 11) import this key into first pc gpg setup: gpg --import ./homeKey.asc
+// * 12) add second pc to repo: git secret tell nail@gmail.com
+// * 13) re-encrypt the files: git secret reveal; git secret hide -d
 
 import "./App";

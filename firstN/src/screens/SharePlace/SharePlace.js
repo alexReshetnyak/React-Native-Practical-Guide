@@ -45,12 +45,36 @@ class SharePlaceScreen extends Component {
       }
     }
   };
+  
+  componentWillUnmount() {
+    this.navigationEventListener && this.navigationEventListener.remove();
+  }
+
+  resetFormState = () => {
+    this.setState(prevState => ({
+      controls: {
+        placeName: {
+          ...prevState.controls.placeName,
+          value: "",
+          valid: false,
+          pristine: true
+        },
+        location: {
+          ...prevState.controls.location,
+          value: null,
+          valid: false
+        },
+        image: { ...prevState.controls.image, value: null, valid: false }
+      }
+    }));
+  }
 
   navigationButtonPressed({ buttonId }) {
     // * Navigation method
     buttonId === "openSideDrawerButton" &&
       SideDrawer.showSideDrawer(this.props.componentId);
   }
+
 
   placeAddedHandler = async () => {
     const {
@@ -60,28 +84,10 @@ class SharePlaceScreen extends Component {
     } = this.state.controls;
     if (placeName.trim()) {
       this.props.onAddPlace(placeName, location, image);
-      this.setState(prevState => ({
-        controls: {
-          placeName: {
-            ...prevState.controls.placeName,
-            value: "",
-            valid: false,
-            pristine: true
-          },
-          location: {
-            ...prevState.controls.location,
-            value: null,
-            valid: false
-          },
-          image: { ...prevState.controls.image, value: null, valid: false }
-        }
-      }));
+      this.resetFormState();
     }
   };
 
-  componentWillUnmount() {
-    this.navigationEventListener && this.navigationEventListener.remove();
-  }
 
   onChangePlaceNameHandler = newName => {
     this.setState(prevState => ({
@@ -109,6 +115,7 @@ class SharePlaceScreen extends Component {
     }));
   };
 
+
   imagePickedHandler = image => {
     this.setState(prevState => ({
       controls: {
@@ -120,6 +127,7 @@ class SharePlaceScreen extends Component {
       }
     }));
   };
+
 
   render() {
     const { controls } = this.state;
