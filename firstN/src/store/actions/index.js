@@ -2,7 +2,9 @@ export {
   setPlaces,
   addPlace,
   getPlaces,
-  deletePlace
+  deletePlace,
+  placeAdded,
+  startAddPlace
 } from './places';
 
 export {

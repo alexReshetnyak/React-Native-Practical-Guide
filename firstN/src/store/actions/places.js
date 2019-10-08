@@ -1,6 +1,6 @@
 import { Navigation } from 'react-native-navigation';
 
-import { SET_PLACES } from "./actionTypes";
+import { SET_PLACES , PLACE_ADDED , START_ADD_PLACE } from "./actionTypes";
 import { setBadgeNumber } from './badge';
 import { authGetToken } from './auth';
 import { uiStartLoading, uiStopLoading } from './ui';
@@ -50,22 +50,25 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
       }
     );
 
+    if (!addPlaceRes.ok) { throw `Add place error, status: ${addPlaceRes.status}` }
+
     console.log('addPlace response', addPlaceRes);
     dispatch(uiStopLoading());
     dispatch(getPlaces());
+    dispatch(placeAdded());
     
-    const findScreenComponentId = getState().badge.componentId;
-    console.log('Find screen component ID:', findScreenComponentId);
+    // const findScreenComponentId = getState().badge.componentId;
+    // console.log('Find screen component ID:', findScreenComponentId);
 
-    Navigation.mergeOptions(findScreenComponentId, {
-      bottomTabs: {
-        currentTabId: findScreenComponentId
-      }
-    });
+    // Navigation.mergeOptions(findScreenComponentId, {
+    //   bottomTabs: {
+    //     currentTabId: findScreenComponentId
+    //   }
+    // });
 
     // Navigation.mergeOptions('HomeId', {
     //   bottomTabs: {
-    //     currentTabIndex: 1
+    //     currentTabIndex: 0
     //   }
     // });
   } catch (error) {
@@ -75,11 +78,20 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
   }
 };
 
+export const placeAdded = () => ({
+  type: PLACE_ADDED
+});
+
+export const startAddPlace = () => ({
+  type: START_ADD_PLACE
+});
+
 export const getPlaces = () => async dispatch => {
   try {
     const token = await dispatch(authGetToken());
     const getPlacesUrl = "https://react-native-first-app-37e81.firebaseio.com/places.json";
     const json = await fetch(`${getPlacesUrl}?auth=${token}`);
+    if (!json.ok) { throw `Get places error, status: ${json.status}` }
     const res = await json.json();
     
     if (!res) {

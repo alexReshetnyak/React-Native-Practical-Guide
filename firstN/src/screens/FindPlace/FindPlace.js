@@ -24,6 +24,16 @@ class FindPlaceScreen extends Component {
     this.props.setComponentId(this.props.componentId);
     this.props.loadPlaces();
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.placeAdded && prevProps.placeAdded !== this.props.placeAdded) {
+      Navigation.mergeOptions(this.props.componentId, {
+        bottomTabs: {
+          currentTabId: this.props.componentId
+        }
+      });
+    }
+  }
   
   navigationButtonPressed({ buttonId }) {
     if (buttonId === "openSideDrawerButton") {
@@ -37,7 +47,7 @@ class FindPlaceScreen extends Component {
     getPlaceDetailScreen(selectedPlace).then(navComponent =>{
       Navigation.push(this.props.componentId, navComponent);
     });
-  }
+  };
 
   placesSearchHandler = () => {
     Animated.timing(this.state.removeAnimation, {
@@ -50,7 +60,7 @@ class FindPlaceScreen extends Component {
       });
       this.placesLoadedHandler(); // * Run places animation
     });
-  }
+  };
 
   placesLoadedHandler = () => {
     Animated.timing(this.state.placesAnimation, {
@@ -58,7 +68,7 @@ class FindPlaceScreen extends Component {
       duration: 500,
       useNativeDriver: true
     }).start();
-  }
+  };
   
   render() {
     let content = (
@@ -86,7 +96,8 @@ class FindPlaceScreen extends Component {
 }
 
 const mapStateToProps = state => ({
-  places: state.places.places
+  places:     state.places.places,
+  placeAdded: state.places.placeAdded
 });
 
 const mapDispatchToProps = dispatch => ({

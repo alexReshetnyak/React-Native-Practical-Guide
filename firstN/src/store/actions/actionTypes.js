@@ -1,7 +1,9 @@
 
-export const ADD_PLACE    = 'ADD_PLACE';
-export const SET_PLACES   = 'SET_PLACES';
-export const GET_PLACES   = 'GET_PLACES';
+export const ADD_PLACE        = 'ADD_PLACE';
+export const SET_PLACES       = 'SET_PLACES';
+export const GET_PLACES       = 'GET_PLACES';
+export const PLACE_ADDED      = 'PLACE_ADDED';
+export const START_ADD_PLACE  = 'START_ADD_PLACE';
 
 export const SET_COMPONENT_ID      = 'SET_COMPONENT_ID';
 export const SET_BADGE_NUMBER      = 'SET_BADGE_NUMBER';
