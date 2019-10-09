@@ -40,7 +40,9 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
 
     if (img.error) { throw img.error }
 
-    placeData.image = img.imageUrl;
+    placeData.image     = img.imageUrl;
+    placeData.imagePath = img.imagePath;
+
     console.log('addPlace start upload place');
     const addPlaceRes = await fetch(
       `${addPlaceUrl}?auth=${token}`,
@@ -126,12 +128,14 @@ export const deletePlace = key => async dispatch => {
   try {
     const token = await dispatch(authGetToken());
     const deletePlaceUrl = `https://react-native-first-app-37e81.firebaseio.com/places/${key}.json`;
-    await fetch(
+    const json = await fetch(
       `${deletePlaceUrl}?auth=${token}`,
       {
         method: "DELETE"
       }
     );
+
+    if (!json.ok) { throw `Delete place error, status: ${json.status}` }
     
     return dispatch(getPlaces());
   } catch (error) {

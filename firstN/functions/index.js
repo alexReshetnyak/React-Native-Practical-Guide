@@ -42,6 +42,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
     
         const bucket = googleCloudStorage.bucket(googleCloudConfig.projectId + '.appspot.com');
         const uuid = UUID();
+        const imagePath = "places" + uuid + ".jpg";
 
         console.log('Start upload image to bucket');
         
@@ -49,7 +50,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
           "/tmp/uploaded-image.jpg",
           {
             uploadType: "media",
-            destination: "places" + uuid + ".jpg",
+            destination: imagePath,
             metadata: {
               metadata: {
                 contentType: "image/jpg",
@@ -68,7 +69,8 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                   "/o/" +
                   encodeURIComponent(file.name) +
                   "?alt=media&token=" +
-                  uuid
+                  uuid,
+                imagePath
               });
             } else {
               console.log(err);
@@ -85,3 +87,13 @@ exports.storeImage = functions.https.onRequest((request, response) => {
     return null;
   });
 });
+
+
+exports.deleteImage = functions.database.ref('/places/{placeId}')
+  .onDelete((event, context) => {
+    console.log('image', event.val());
+    const placeData = event.val();
+    const imagePath = placeData.imagePath;
+    const bucket = googleCloudStorage.bucket(googleCloudConfig.projectId + '.appspot.com');
+    return bucket.file(imagePath).delete();
+  });
