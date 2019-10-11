@@ -1,3 +1,5 @@
 ./firstN/src/config.js
 .vscode
 ./firstN/functions/firebase-adminsdk.json
+./firstN copy/*
+firstN copy/
