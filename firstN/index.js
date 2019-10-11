@@ -10,11 +10,20 @@
 // * cd functions npm i
 // * firebase deploy - to deploy changes
 
+// * auto link packages:
+// * # install
+// * yarn add react-native-webview
+// * cd ios && pod install && cd .. # CocoaPods on iOS needs this extra step
+// * # run
+// * yarn react-native run-ios
+// * yarn react-native run-android
+
 // * Instructions how to fix google maps for android:
 // * 1) Android Studio -> search SDK manager -> SDK tools -> install Google play services
 // * 2) Enable your google api key
 // * 3) Change user permissions to get current location in android -> src -> main -> AndroidManifest
-// * 3) Android Studio -> search AVD manager -> create new device with different version of android (optional)
+// * 4) (RN >= 0.60) https://github.com/react-native-community/react-native-maps/pull/3106/files
+// * 5) Android Studio -> search AVD manager -> create new device with different version of android (optional)
 
 // * git-secret to safe api keys
 // * 1) brew install git-secret
