@@ -17,6 +17,7 @@ import { ButtonWithBackground } from "../../components/UI/ButtonWithBackground/B
 import { validateFormValue } from "../../utility/validation";
 import { authFormControls } from "./AuthFormControls";
 import { tryAuth, authAutoSignIn } from "../../store/actions";
+import SplashScreen from 'react-native-splash-screen';
 
 class AuthScreen extends Component {
   state = {
@@ -32,6 +33,7 @@ class AuthScreen extends Component {
 
   componentDidMount() {
     this.props.onAutoSignIn();
+    SplashScreen.hide();
   }
 
   componentWillUnmount() {

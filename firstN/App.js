@@ -1,6 +1,8 @@
 import { Navigation } from "react-native-navigation";
 import { registerScreens } from "./src/navigation/screens";
+import SplashScreen from 'react-native-splash-screen';
 
+SplashScreen.show();
 registerScreens();
 
 Navigation.events().registerAppLaunchedListener(() => {
