@@ -40,4 +40,10 @@
 // * 12) add second pc to repo: git secret tell nail@gmail.com
 // * 13) re-encrypt the files: git secret reveal; git secret hide -d
 
+// * To create apk for debug follow this steps:
+// * 1) run in project folder: react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res
+// * 2) cd android && ./gradlew clean
+// * 3) ./gradlew assembleDebug
+
+
 import "./App";
