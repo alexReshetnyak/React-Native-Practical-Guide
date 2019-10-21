@@ -20,7 +20,7 @@ import { tryAuth, authAutoSignIn } from "../../store/actions";
 import SplashScreen from 'react-native-splash-screen';
 
 
-const AuthScreen = props => {
+const authScreen = props => {
   const { isLoading, onTryAuth, onAutoSignIn } = props;
   const [controls, setControls] = useState(authFormControls);
   const [authMode, setAuthMode] = useState('login');
@@ -146,7 +146,7 @@ const mapDispatchToProps = dispatch => ({
   onAutoSignIn: () => {dispatch(authAutoSignIn())}
 });
 
-export default connect(
+export const AuthScreen = connect(
     mapStateToProps,
     mapDispatchToProps
-)(AuthScreen);
+  )(authScreen);
