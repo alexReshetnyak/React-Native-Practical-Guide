@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   ImageBackground,
   Dimensions,
@@ -155,6 +155,126 @@ class AuthScreen extends Component {
   }
 }
 
+// * --------------------------SFC----------------------------------
+
+// const AuthScreen = props => {
+//   const { isLoading, onTryAuth, onAutoSignIn } = props;
+//   const [controls, setControls] = useState(authFormControls);
+//   const [authMode, setAuthMode] = useState('login');
+//   const [viewMode, setViewMode] = useState(Dimensions.get("window").height > 500 ? "portrait" : "landscape");
+
+//   useEffect(() => {
+//     console.log('Component did mount');
+//     Dimensions.addEventListener("change", updateStyles);
+//     onAutoSignIn();
+//     SplashScreen.hide();
+//   }, []);
+
+//   useEffect(() => { return () => {
+//     console.log('Component will unmount');
+//     Dimensions.removeEventListener("change", updateStyles);
+//   }}, []);
+
+//   useEffect(() => {
+//     console.log('Password valid change', controls.password.valid);
+//     !controls["confirmPassword"].valid && setControls({
+//       ...controls,
+//       confirmPassword: {
+//         ...controls.confirmPassword,
+//         valid: validateFormValue(
+//           controls["confirmPassword"].value,
+//           "confirmPassword",
+//           controls
+//         )
+//       }
+//     });
+//   }, [controls.password.valid])
+
+//   const updateStyles = dims => {
+//     setViewMode(dims.window.height > 500 ? "portrait" : "landscape");
+//   };
+
+//   const switchAuthMode = () => {
+//     setAuthMode(authMode === "login" ? "signup" : "login");
+//   };
+
+//   const handleAuth = () => {
+//     const authData = Object.keys(controls).reduce((sum, key) => {
+//        sum[key] = controls[key].value;
+//        return sum;
+//     }, {});
+//     Keyboard.dismiss();
+//     onTryAuth(authData, authMode);
+//   };
+
+//   const updateInputState = (key, value) => {
+//     setControls({
+//       ...controls,
+//       [key]: {
+//         ...controls[key],
+//         valid: validateFormValue(value, key, controls),
+//         pristine: false,
+//         value
+//       }
+//     });
+//   };
+
+//   const checkFormValidity = () => {
+//     isValid = Object.keys(controls).every(key => {
+//       return authMode === "login" && key === "confirmPassword"
+//         ? true
+//         : controls[key].valid;
+//     });
+//     return isValid;
+//   };
+
+//   const headingText = viewMode === "portrait" ? (
+//       <MainText>
+//         <HeadingText style={{ color: "white" }}>
+//           Please {authMode === "login" ? " Sign Up" : " Login"}
+//         </HeadingText>
+//       </MainText>
+//     ) : null;
+
+//   const submitButton = isLoading ? (
+//       <ActivityIndicator />
+//     ) : (
+//       <ButtonWithBackground
+//         disabled={!checkFormValidity()}
+//         onPress={handleAuth}
+//       >
+//         Submit
+//       </ButtonWithBackground>
+//     );
+
+//   return (
+//     <ImageBackground
+//         source={backgroundImage}
+//         style={authStyles.backgroundImage}
+//       >
+//         <KeyboardAvoidingView style={authStyles.container} behavior="height">
+//           {headingText}
+
+//           <ButtonWithBackground onPress={switchAuthMode}>
+//             Switch to {authMode === "login" ? " Sign Up" : " Login"}
+//           </ButtonWithBackground>
+
+//           <AuthForm
+//             controls={controls}
+//             authMode={authMode}
+//             viewMode={viewMode}
+//             onFormChange={updateInputState}
+//           />
+
+//           {submitButton}
+//       </KeyboardAvoidingView>
+//     </ImageBackground>
+//   );
+// };
+
+// * ------------------------END SFC--------------------------------
+
+
 const mapStateToProps = state => ({
   isLoading: state.ui.isLoading
 });
@@ -164,9 +284,7 @@ const mapDispatchToProps = dispatch => ({
   onAutoSignIn: () => {dispatch(authAutoSignIn())}
 });
 
-AuthScreen = connect(
-  mapStateToProps,
-  mapDispatchToProps
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
 )(AuthScreen);
-
-export { AuthScreen };

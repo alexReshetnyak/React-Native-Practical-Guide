@@ -3,3 +3,5 @@
 ./firstN/functions/firebase-adminsdk.json
 ./firstN copy/*
 firstN copy/
+.gitsecret/keys/random_seed
+!*.secret

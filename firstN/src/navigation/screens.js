@@ -2,7 +2,7 @@ import { Navigation } from 'react-native-navigation';
 import { Provider } from 'react-redux';
 
 import configureStore from '../store/configureStore';
-import { AuthScreen } from '../screens/Auth/Auth';
+import AuthScreen from '../screens/Auth/Auth';
 import { FindPlaceScreen } from '../screens/FindPlace/FindPlace';
 import { SharePlaceScreen } from '../screens/SharePlace/SharePlace';
 import { PlaceDetailScreen } from '../screens/PlaceDetail/PlaceDetail';
