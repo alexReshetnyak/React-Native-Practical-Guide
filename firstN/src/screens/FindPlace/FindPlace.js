@@ -127,7 +127,7 @@ const findPlaceScreen = props => {
   }, []);
 
   const itemSelectedHandler = key => {
-    const selectedPlace = places.find(place => place.key === key);
+    const selectedPlace = props.places.find(place => place.key === key);
 
     getPlaceDetailScreen(selectedPlace).then(navComponent =>{
       Navigation.push(props.componentId, navComponent);
@@ -141,7 +141,6 @@ const findPlaceScreen = props => {
       useNativeDriver: true
     }).start(() => {
       setPlacesLoaded(true);
-      placesLoadedHandler(); // * Run places animation
     });
   };
 
@@ -153,24 +152,29 @@ const findPlaceScreen = props => {
     }).start();
   };
 
-  const content = placesLoaded ?
-    (
-      <Animated.View style={getAnimatedPlacesStyles(placesAnimation)}>
-        <PlaceList places={props.places} onItemSelected={itemSelectedHandler} />
-      </Animated.View>
-    ) : (
-      <Animated.View style={getAnimatedButtonStyles(removeAnimation)}>
-        <TouchableOpacity onPress={placesSearchHandler}>
-          <View style={styles.searchButton}>
-            <Text style={styles.searchButtonText}>Find Places</Text>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-    );
+  const getContent = () => {
+    const content = placesLoaded ?
+      (
+        <Animated.View style={getAnimatedPlacesStyles(placesAnimation)}>
+          <PlaceList places={props.places} onItemSelected={itemSelectedHandler} />
+        </Animated.View>
+      ) : (
+        <Animated.View style={getAnimatedButtonStyles(removeAnimation)}>
+          <TouchableOpacity onPress={placesSearchHandler}>
+            <View style={styles.searchButton}>
+              <Text style={styles.searchButtonText}>Find Places</Text>
+            </View>
+          </TouchableOpacity>
+        </Animated.View>
+      );
+
+    placesLoaded && placesLoadedHandler(); // * Run places animation
+    return content;
+  };
 
   return (
     <View style={placesLoaded ? null : styles.buttonContainer}>
-      {content}
+      {getContent()}
     </View>
   );
 }
