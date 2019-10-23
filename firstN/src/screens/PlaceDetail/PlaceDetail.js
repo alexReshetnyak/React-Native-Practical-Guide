@@ -20,7 +20,7 @@ const placeDetailScreen = props => {
   }, [])
 
   useEffect(() => {
-    console.log('NavigationEvents: ', Navigation.events());
+    // console.log('NavigationEvents: ', Navigation.events());
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({ buttonId }) => {
         buttonId === "openSideDrawerButton" &&

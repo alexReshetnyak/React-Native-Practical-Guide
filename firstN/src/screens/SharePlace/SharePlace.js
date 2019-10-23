@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Button,
@@ -18,162 +18,130 @@ import { PickImage } from "../../components/PickImage/PickImage";
 import { PickLocation } from "../../components/PickLocation/PickLocation";
 import { validateFormValue } from "../../utility/validation";
 
-class SharePlaceScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.navigationEventListener = Navigation.events().bindComponent(this);
-  }
 
-  state = {
-    controls: {
-      placeName: {
-        value: "",
-        valid: false,
-        pristine: true,
-        validationRules: {
-          notEmpty: true
-        }
-      },
-      location: {
-        value: null,
-        valid: false
-      },
-      image: {
-        value: null,
-        valid: false
+const sharePlaceScreen = props => {
+  const defaultControls = {
+    placeName: {
+      value: "",
+      valid: false,
+      pristine: true,
+      validationRules: {
+        notEmpty: true
       }
+    },
+    location: {
+      value: null,
+      valid: false
+    },
+    image: {
+      value: null,
+      valid: false
     }
   };
-  
-  componentWillUnmount() {
-    this.navigationEventListener && this.navigationEventListener.remove();
-  }
+  const [controls, setControls] = useState(defaultControls);
 
-  resetFormState = () => {
-    this.setState(prevState => ({
-      controls: {
-        placeName: {
-          ...prevState.controls.placeName,
-          value: "",
-          valid: false,
-          pristine: true
-        },
-        location: {
-          ...prevState.controls.location,
-          value: null,
-          valid: false
-        },
-        image: { ...prevState.controls.image, value: null, valid: false }
-      }
-    }));
-  }
+  useEffect(() => {
+    // console.log('NavigationEvents: ', Navigation.events());
+    const listener = Navigation.events().registerNavigationButtonPressedListener(
+      ({ buttonId }) => {
+        buttonId === "openSideDrawerButton" &&
+        SideDrawer.showSideDrawer(props.componentId)
+      } 
+    );
+    return () => listener.remove();
+  }, []);
 
-  navigationButtonPressed({ buttonId }) {
-    // * Navigation method
-    buttonId === "openSideDrawerButton" &&
-      SideDrawer.showSideDrawer(this.props.componentId);
-  }
+  const resetFormState = () => {
+    setControls(defaultControls);
+  };
 
-
-  placeAddedHandler = async () => {
+  const addPlace = async () => {
     const {
       placeName: { value: placeName },
       location: { value: location },
       image: { value: image }
-    } = this.state.controls;
+    } = controls;
 
-    this.props.onStartAddPlace();
+    props.onStartAddPlace();
     
     if (placeName.trim()) {
-      this.props.onAddPlace(placeName, location, image);
-      this.resetFormState();
+      props.onAddPlace(placeName, location, image);
+      resetFormState();
     }
   };
 
-
-  onChangePlaceNameHandler = newName => {
-    this.setState(prevState => ({
-      controls: {
-        ...prevState.controls,
+  const changePlaceName = newName => {
+    setControls({
+        ...controls,
         placeName: {
-          ...prevState.controls.placeName,
-          valid: validateFormValue(newName, "placeName", prevState.controls),
+          ...controls.placeName,
+          valid: validateFormValue(newName, "placeName", controls),
           pristine: false,
           value: newName
         }
-      }
-    }));
+    });
   };
 
-  locationPickedHandler = location => {
-    this.setState(prevState => ({
-      controls: {
-        ...prevState.controls,
-        location: {
-          value: location,
-          valid: true
-        }
+  const changePickedLocation = location => {
+    setControls({
+      ...controls,
+      location: {
+        value: location,
+        valid: true
       }
-    }));
+    });
   };
 
-
-  imagePickedHandler = image => {
-    this.setState(prevState => ({
-      controls: {
-        ...prevState.controls,
+  const changePickedImage = image => {
+    setControls({
+        ...controls,
         image: {
           value: image,
           valid: true
         }
-      }
-    }));
+      });
   };
 
-
-  render() {
-    const { controls } = this.state;
-    const submitButton = this.props.isLoading ? (
+  const submitButton = props.isLoading ? (
       <ActivityIndicator />
     ) : (
       <Button
-        disabled={
+        disabled = {
           !controls.placeName.valid ||
           !controls.location.valid ||
           !controls.image.valid
         }
         title="Share the place!"
-        onPress={this.placeAddedHandler}
+        onPress={addPlace}
       />
     );
+  
+  return (
+    // <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView>
+      <View style={styles.container}>
+        <MainText>
+          <HeadingText>Share a place with us!</HeadingText>
+        </MainText>
 
-    return (
-      // <ScrollView contentContainerStyle={styles.container}>
-      <ScrollView>
-        <View style={styles.container}>
-          <MainText>
-            <HeadingText>Share a place with us!</HeadingText>
-          </MainText>
+        <PickImage
+          control={controls.image}
+          onImagePicked={changePickedImage}
+        />
+        <PickLocation
+          control={controls.location}
+          onLocationPick={changePickedLocation}
+        />
+        <PlaceInput
+          controls={controls}
+          onChangeText={changePlaceName}
+        />
 
-          <PickImage
-            control={controls.image}
-            onImagePicked={this.imagePickedHandler}
-          />
-          <PickLocation
-            control={controls.location}
-            onLocationPick={this.locationPickedHandler}
-          />
-          <PlaceInput
-            controls={controls}
-            onChangeText={this.onChangePlaceNameHandler}
-          />
-
-          <View style={styles.button}>{submitButton}</View>
-        </View>
-      </ScrollView>
-    );
-  }
-}
+        <View style={styles.button}>{submitButton}</View>
+      </View>
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -203,9 +171,7 @@ const mapDispatchToProps = dispatch => ({
   onStartAddPlace: () => dispatch(startAddPlace())
 });
 
-SharePlaceScreen = connect(
+export const SharePlaceScreen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SharePlaceScreen);
-
-export { SharePlaceScreen };
+)(sharePlaceScreen);

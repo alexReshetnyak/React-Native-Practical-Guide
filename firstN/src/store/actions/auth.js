@@ -178,7 +178,7 @@ export const authGetToken = () => async (dispatch, getState) => {
 export const authAutoSignIn = () => async dispatch => {
   try {
     const token = await dispatch(authGetToken());
-    console.log('Auth auto sign in, Token', token);
+    // console.log('Auth auto sign in, Token', token);
     goHome();
   } catch (error) {
     console.log('Failed to fetch token', error);

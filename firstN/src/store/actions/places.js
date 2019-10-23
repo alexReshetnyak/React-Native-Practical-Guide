@@ -17,9 +17,9 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
   dispatch(uiStartLoading());
   
   try {
-    console.log('Start addPlace');
+    // console.log('Start addPlace');
     const token = await dispatch(authGetToken());
-    console.log('addPlace token', token);
+    // console.log('addPlace token', token);
 
     const imageJson = await fetch(
       imageUrl,
@@ -34,16 +34,16 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
       }
     );
 
-    console.log('addPlace imageJson', imageJson);
+    // console.log('addPlace imageJson', imageJson);
     const img = await imageJson.json();
-    console.log('addPlace img', img);
+    // console.log('addPlace img', img);
 
     if (img.error) { throw img.error }
 
     placeData.image     = img.imageUrl;
     placeData.imagePath = img.imagePath;
 
-    console.log('addPlace start upload place');
+    // console.log('addPlace start upload place');
     const addPlaceRes = await fetch(
       `${addPlaceUrl}?auth=${token}`,
       {
@@ -54,7 +54,7 @@ export const addPlace = (placeName, location, image) => async (dispatch, getStat
 
     if (!addPlaceRes.ok) { throw `Add place error, status: ${addPlaceRes.status}` }
 
-    console.log('addPlace response', addPlaceRes);
+    // console.log('addPlace response', addPlaceRes);
     dispatch(uiStopLoading());
     dispatch(getPlaces());
     dispatch(placeAdded());
