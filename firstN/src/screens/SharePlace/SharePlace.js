@@ -17,7 +17,6 @@ import { PlaceInput } from "../../components/PlaceInput/PlaceInput";
 import { PickImage } from "../../components/PickImage/PickImage";
 import { PickLocation } from "../../components/PickLocation/PickLocation";
 import { validateFormValue } from "../../utility/validation";
-import { getFindPlaceScreen } from '../../navigation/homeScreens';
 
 class SharePlaceScreen extends Component {
   constructor(props) {
