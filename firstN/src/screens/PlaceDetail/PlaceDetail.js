@@ -6,7 +6,7 @@ import { Navigation } from 'react-native-navigation';
 import MapView from "react-native-maps";
 
 import { deletePlace } from '../../store/actions';
-import { SideDrawer } from '../SideDrawer/SideDrawer'
+import { showSideDrawer } from '../SideDrawer/SideDrawer'
 
 const placeDetailScreen = props => {
   const { selectedPlace } = props;
@@ -23,8 +23,7 @@ const placeDetailScreen = props => {
     // console.log('NavigationEvents: ', Navigation.events());
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({ buttonId }) => {
-        buttonId === "openSideDrawerButton" &&
-        SideDrawer.showSideDrawer(props.componentId)
+        buttonId === "openSideDrawerButton" && showSideDrawer(props.componentId);
       } 
     );
     return () => listener.remove();

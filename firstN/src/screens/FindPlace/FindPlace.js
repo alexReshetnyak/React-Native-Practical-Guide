@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Navigation } from 'react-native-navigation';
 
 import { PlaceList } from '../../components/PlaceList/PlaceList';
-import { SideDrawer } from '../SideDrawer/SideDrawer';
+import { showSideDrawer} from '../SideDrawer/SideDrawer';
 import { getPlaceDetailScreen } from '../../navigation/homeScreens';
 import { setComponentId, getPlaces } from '../../store/actions';
 
@@ -30,9 +30,7 @@ const findPlaceScreen = props => {
     // console.log('NavigationEvents: ', Navigation.events());
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({ buttonId }) => {
-        if (buttonId === "openSideDrawerButton") {
-          SideDrawer.showSideDrawer(props.componentId);
-        }
+        buttonId === "openSideDrawerButton" && showSideDrawer(props.componentId);
       }
     );
     return () => listener.remove();

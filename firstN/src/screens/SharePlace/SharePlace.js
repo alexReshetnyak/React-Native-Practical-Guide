@@ -10,7 +10,7 @@ import { Navigation } from "react-native-navigation";
 import { connect } from "react-redux";
 
 import { addPlace, startAddPlace } from "../../store/actions";
-import { SideDrawer } from "../SideDrawer/SideDrawer";
+import { showSideDrawer} from "../SideDrawer/SideDrawer";
 import { MainText } from "../../components/UI/MainText/MainText";
 import { HeadingText } from "../../components/UI/HeadingText/HeadingText";
 import { PlaceInput } from "../../components/PlaceInput/PlaceInput";
@@ -44,8 +44,7 @@ const sharePlaceScreen = props => {
     // console.log('NavigationEvents: ', Navigation.events());
     const listener = Navigation.events().registerNavigationButtonPressedListener(
       ({ buttonId }) => {
-        buttonId === "openSideDrawerButton" &&
-        SideDrawer.showSideDrawer(props.componentId)
+        buttonId === "openSideDrawerButton" && showSideDrawer(props.componentId);
       } 
     );
     return () => listener.remove();
